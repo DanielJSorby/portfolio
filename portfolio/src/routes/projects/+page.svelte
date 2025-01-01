@@ -10,12 +10,12 @@
 				en: 'Dasi GPT'
 			},
 			description: {
-				no: 'En ai chatbot som hjelper deg med alt du trengter!',
+				no: 'En ai chatbot som hjelper deg med alt du trenger!',
 				en: 'An ai chatbot that helps you with everything you need!'
 			},
 			technologies: ['Svelte Kit', 'TypeScript', 'OpenAI', 'MySQL', 'Linux'],
 			image: 'https://picsum.photos/800/400?random=1',
-			link: 'https://github.com/yourusername/project1'
+			link: 'https://github.com/DanielJSorby/DASI'
 		},
 		{
 			title: {
@@ -23,19 +23,25 @@
 				en: 'Prime Wheels'
 			},
 			description: {
-				no: 'En bilnettsted for å kjøpe biler. Laget som en skoleprosjekt.',
+				no: 'Et bilnettsted for å kjøpe biler. Laget som en skoleprosjekt.',
 				en: 'A car website for buying cars. Made as a school project.'
 			},
-			technologies: ['HTML', 'CSS', 'HTML'],
+			technologies: ['HTML', 'CSS', 'JavaScript'],
 			image: 'https://picsum.photos/800/400?random=2',
-			link: 'https://github.com/yourusername/project2'
+			link: 'https://github.com/DanielJSorby/DanielOgSimen'
 		},
 		{
-			title: 'Prosjekt 3',
-			description: 'Oversikt over ditt tredje prosjekt. Diskuter problemet det løser og dets innvirkning.',
-			technologies: ['JavaScript', 'HTML', 'CSS'],
+			title: {
+				no: 'IMDB',
+				en: 'IMDB'
+			},
+			description: {
+				no: 'En nettside hvor du kan se informasjon om filmer.',
+				en: 'A website where you can see information about movies.'
+			},
+			technologies: ['HTML', 'CSS', 'JavaScript'],
 			image: 'https://picsum.photos/800/400?random=3',
-			link: 'https://github.com/yourusername/project3'
+			link: 'https://github.com/DanielJSorby/DanielOgSimen'
 		}
 	];
 </script>
