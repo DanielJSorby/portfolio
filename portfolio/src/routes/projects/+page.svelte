@@ -56,6 +56,19 @@
 			technologies: ['Svelte Kit', 'Json', 'JavaScript'],
 			image: 'https://picsum.photos/800/400?random=4',
 			link: 'https://github.com/DanielJSorby/flow-svelte'
+		},
+		{
+			title: {
+				no: 'Flask Logg Inn',
+				en: 'Flask Log In'
+			},
+			description: {
+				no: 'Et prosjekt for å lære Flask, med et enkelt innloggingsskjema som sjekker mot en bruker-JSON-fil.',
+				en: 'A project to learn Flask, featuring a simple login form that validates against a user JSON file.'
+			},
+			technologies: ['Python', 'Json', 'JavaScript', 'HTML'],
+			image: 'https://picsum.photos/800/400?random=5',
+			link: 'https://github.com/DanielJSorby/flask'
 		}
 	];
 </script>
