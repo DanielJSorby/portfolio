@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en">
 	<head>
 		<meta charset="utf-8" />
 		<link rel="icon" href="%sveltekit.assets%/favicon.png" />
@@ -10,9 +10,35 @@
 	<body data-sveltekit-preload-data="hover">
 		<div style="display: contents">%sveltekit.body%</div>
 		<script>
+			// Check if theme is stored in localStorage
+			let theme = localStorage.getItem("theme");
+
+			// If no theme is stored, check system preference
+			if (!theme) {
+				theme = window.matchMedia("(prefers-color-scheme: dark)")
+					.matches
+					? "dark"
+					: "light";
+				localStorage.setItem("theme", theme);
+			}
+
 			// Set initial theme
-			const theme = localStorage.getItem("theme") || "light";
 			document.documentElement.setAttribute("data-theme", theme);
+
+			// Listen for system theme changes
+			window
+				.matchMedia("(prefers-color-scheme: dark)")
+				.addEventListener("change", (e) => {
+					if (!localStorage.getItem("theme")) {
+						// Only update if user hasn't manually set a preference
+						const newTheme = e.matches ? "dark" : "light";
+						document.documentElement.setAttribute(
+							"data-theme",
+							newTheme
+						);
+						localStorage.setItem("theme", newTheme);
+					}
+				});
 		</script>
 	</body>
 </html>
