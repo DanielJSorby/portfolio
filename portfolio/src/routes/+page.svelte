@@ -8,15 +8,21 @@
 	const skills = [
 		'JavaScript',
 		'TypeScript',
+		'Linux',
 		'Svelte',
-		'React',
-		'Node.js',
+		'HTML',
 		'CSS',
-		'HTML'
+		'Python',
+		'MySQL',
+		'MariaDB',
+		'Git',
+		'XD',
+        'Flask',
+        'React',
+		'Figma'
 	];
 
 	let sectionsVisible = {
-		skills: false,
 		projects: false
 	};
 
@@ -62,14 +68,18 @@
 	</div>
 </div>
 
-<section class="skills animate-on-scroll">
+<div class="skills-container">
 	<h2>{$language === 'no' ? 'Ferdigheter' : 'Skills'}</h2>
-	<div class="skills-grid">
-		{#each skills as skill, i}
-			<div class="skill-item" style="animation-delay: {i * 0.1}s">{skill}</div>
-		{/each}
+	<div class="skills-carousel">
+		<div class="skills-track">
+			{#each [...skills, ...skills, ...skills, ...skills] as skill}
+				<div class="skill-box">
+					{skill}
+				</div>
+			{/each}
+		</div>
 	</div>
-</section>
+</div>
 
 <section class="featured">
 	<h2>{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
@@ -202,13 +212,14 @@
 	}
 
 	.hero-background {
-		position: absolute;
+		position: fixed;
 		top: 0;
 		left: 0;
 		right: 0;
 		bottom: 0;
 		z-index: 1;
 		overflow: hidden;
+		pointer-events: none;
 	}
 
 	.circle {
@@ -259,78 +270,113 @@
 		}
 	}
 
-	@media (max-width: 768px) {
-		.hero-buttons {
-			flex-direction: column;
-			align-items: stretch;
-			padding: 0 clamp(1rem, 5vw, 2rem);
-		}
-
-		.cta-button {
-			justify-content: center;
-		}
+	.skills-container {
+		max-width: 100%;
+		margin: 4rem auto;
+		padding: 2rem;
+		position: relative;
+		z-index: 10;
+		overflow: hidden;
 	}
 
-	@media (max-width: 480px) {
-		.circle1 {
-			width: 300px;
-			height: 300px;
-		}
-
-		.circle2 {
-			width: 250px;
-			height: 250px;
-		}
-
-		.circle3 {
-			width: 200px;
-			height: 200px;
-		}
-
-		.skills-grid {
-			grid-template-columns: repeat(2, 1fr);
-		}
-	}
-
-	.skills {
-		padding: clamp(2rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
-	}
-
-	.skills h2 {
+	.skills-container h2 {
 		text-align: center;
-		margin-bottom: clamp(1.5rem, 4vw, 3rem);
-		font-size: clamp(1.5rem, 5vw, 2.5rem);
+		font-size: 2.5rem;
+		margin-bottom: 2rem;
+		color: var(--text-primary);
+		padding: 0 2rem;
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+		-webkit-background-clip: text;
+		-webkit-text-fill-color: transparent;
 	}
 
-	.skills-grid {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-		gap: clamp(0.5rem, 2vw, 1rem);
-		max-width: 1200px;
-		margin: 0 auto;
+	.skills-carousel {
+		width: 100%;
+		overflow: hidden;
+		position: relative;
+		padding: 1rem 0;
+		z-index: 10;
 	}
 
-	.skill-item {
-		background-color: var(--nav-bg);
-		color: var(--nav-text);
+	.skills-track {
+		display: flex;
+		gap: 2rem;
+		animation: scroll 60s linear infinite;
 		padding: 1rem;
-		border-radius: 8px;
-		text-align: center;
-		box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-		transition: transform 0.2s;
-		opacity: 0;
-		transform: translateY(20px);
-		animation: fadeInUp 0.5s ease forwards;
+		width: max-content;
+		position: relative;
+		z-index: 10;
+		transition: animation-play-state 0.5s ease;
+	}
+
+	.skills-carousel:hover .skills-track {
 		animation-play-state: paused;
+		transition: all 0.5s ease;
 	}
 
-	.visible .skill-item {
-		animation-play-state: running;
+	@keyframes scroll {
+		0% {
+			transform: translateX(calc(-25%));
+		}
+		100% {
+			transform: translateX(calc(-75%));
+		}
 	}
 
-	.skill-item:hover {
-		transform: translateY(-2px);
-		background-color: var(--accent-primary);
+	.skill-box {
+		background: var(--bg-secondary);
+		padding: 1.5rem 2rem;
+		border-radius: 12px;
+		text-align: center;
+		color: var(--text-primary);
+		font-size: 1.1rem;
+		box-shadow: var(--card-shadow);
+		border-left: 4px solid var(--accent-primary);
+		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		white-space: nowrap;
+		flex-shrink: 0;
+		min-width: 150px;
+		position: relative;
+		z-index: 10;
+		cursor: pointer;
+		overflow: hidden;
+	}
+
+	.skill-box::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+		opacity: 0;
+		transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+		z-index: -1;
+	}
+
+	.skill-box:hover {
+		transform: translateY(-6px);
+		color: white;
+		border-left-color: transparent;
+		box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+	}
+
+	.skill-box:hover::before {
+		opacity: 1;
+	}
+
+	@media (max-width: 768px) {
+		.skills-track {
+			animation-duration: 40s;
+			gap: 1rem;
+		}
+
+		.skill-box {
+			padding: 1rem 1.5rem;
+			font-size: 1rem;
+			min-width: 120px;
+		}
 	}
 
 	.featured {
