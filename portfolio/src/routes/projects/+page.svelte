@@ -1,5 +1,6 @@
 <script>
 	import { language, translations } from '$lib/stores/language';
+	import { techColors } from '$lib/utils/techColors';
 	
 	$: t = translations[$language];
 
@@ -75,7 +76,9 @@
 				<p>{project.description[$language]}</p>
 				<div class="tech-stack">
 					{#each project.technologies as tech}
-						<span class="tech-tag">{tech}</span>
+						<span class="tech-tag" style="--tech-color: {techColors[tech] || '#666666'}">
+							{tech}
+						</span>
 					{/each}
 				</div>
 				<a href={project.link} target="_blank" rel="noopener noreferrer">
@@ -197,11 +200,15 @@
 		padding: 0.25rem 0.75rem;
 		border-radius: 16px;
 		font-size: clamp(0.75rem, 2vw, 0.875rem);
-		transition: background-color 0.2s;
+		transition: all 0.3s ease;
+		border-left: 3px solid var(--tech-color);
 	}
 
 	.tech-tag:hover {
-		background-color: var(--accent-primary);
+		background-color: var(--tech-color);
+		color: white;
+		transform: translateY(-2px);
+		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 	}
 
 	a {

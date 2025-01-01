@@ -1,26 +1,12 @@
 <script>
 	import { language, translations } from '$lib/stores/language';
 	import { startHeroAnimation } from '$lib/stores/animation';
+	import { techColors } from '$lib/utils/techColors';
 	import { onMount } from 'svelte';
 	
 	$: t = translations[$language];
 
-	const skills = [
-		'JavaScript',
-		'TypeScript',
-		'Linux',
-		'Svelte',
-		'HTML',
-		'CSS',
-		'Python',
-		'MySQL',
-		'MariaDB',
-		'Git',
-		'XD',
-        'Flask',
-        'React',
-		'Figma'
-	];
+	const skills = Object.entries(techColors).map(([name, color]) => ({ name, color }));
 
 	const featuredProjects = [
 		{
@@ -102,8 +88,8 @@
 	<div class="skills-carousel">
 		<div class="skills-track">
 			{#each [...skills, ...skills, ...skills, ...skills] as skill}
-				<div class="skill-box">
-					{skill}
+				<div class="skill-box" style="--skill-color: {skill.color}">
+					{skill.name}
 				</div>
 			{/each}
 		</div>
@@ -123,7 +109,9 @@
 					<p>{project.description[$language]}</p>
 					<div class="tech-stack">
 						{#each project.technologies as tech}
-							<span class="tech-tag">{tech}</span>
+							<span class="tech-tag" style="--tech-color: {techColors[tech] || '#666666'}">
+								{tech}
+							</span>
 						{/each}
 					</div>
 					<a href={project.link} target="_blank" rel="noopener noreferrer">
@@ -371,7 +359,7 @@
 		color: var(--text-primary);
 		font-size: 1.1rem;
 		box-shadow: var(--card-shadow);
-		border-left: 4px solid var(--accent-primary);
+		border-left: 4px solid var(--skill-color);
 		transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 		white-space: nowrap;
 		flex-shrink: 0;
@@ -389,7 +377,7 @@
 		left: 0;
 		width: 100%;
 		height: 100%;
-		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+		background: var(--skill-color);
 		opacity: 0;
 		transition: opacity 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 		z-index: -1;
@@ -442,37 +430,26 @@
 		border-radius: 20px;
 		box-shadow: var(--card-shadow);
 		overflow: hidden;
-		transition: all 0.3s ease;
 		border: 2px solid transparent;
 		position: relative;
 		z-index: 1;
 		width: 100%;
-	}
-
-	.project-card::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(
-			45deg,
-			var(--accent-primary),
-			var(--accent-secondary)
-		);
-		z-index: -1;
-		opacity: 0;
-		transition: opacity 0.3s ease;
+		transition: transform 0.3s ease;
 	}
 
 	.project-card:hover {
-		transform: translateY(-8px) rotate(1deg);
+		transform: translateY(-8px);
 		border-color: var(--accent-primary);
 	}
 
-	.project-card:hover::before {
-		opacity: 0.1;
+	.animate-on-scroll {
+		opacity: 1;
+		transform: none;
+	}
+
+	.animate-on-scroll.visible {
+		opacity: 1;
+		transform: none;
 	}
 
 	.project-image {
@@ -522,11 +499,15 @@
 		padding: 0.25rem 0.75rem;
 		border-radius: 16px;
 		font-size: clamp(0.75rem, 2vw, 0.875rem);
-		transition: background-color 0.2s;
+		transition: all 0.3s ease;
+		border-left: 3px solid var(--tech-color);
 	}
 
 	.tech-tag:hover {
-		background-color: var(--accent-primary);
+		background-color: var(--tech-color);
+		color: white;
+		transform: translateY(-2px);
+		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
 	}
 
 	.view-all {
