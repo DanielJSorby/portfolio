@@ -1,9 +1,6 @@
 {
 	"version": 2,
-	"builds": [
-		{
-			"src": "package.json",
-			"use": "@vercel/node@18"
-		}
-	]
+	"buildCommand": "npm run build",
+	"framework": "sveltekit",
+	"nodeVersion": "18.x"
 }
