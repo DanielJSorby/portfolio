@@ -41,7 +41,7 @@
 			},
 			technologies: ['HTML', 'CSS', 'JavaScript'],
 			image: 'https://picsum.photos/800/400?random=3',
-			link: 'https://github.com/DanielJSorby/DanielOgSimen'
+			link: 'https://github.com/DanielJSorby/imdb'
 		}
 	];
 </script>
