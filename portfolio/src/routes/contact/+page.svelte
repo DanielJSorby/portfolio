@@ -9,40 +9,73 @@
 		message: ''
 	};
 
-	function handleSubmit(event) {
-		event.preventDefault();
-		console.log('Skjema sendt:', formData);
-		formData = {
-			name: '',
-			email: '',
-			message: ''
-		};
+	let isSubmitting = false;
+	let submitStatus = '';
+
+	async function handleSubmit(e) {
+		e.preventDefault();
+		isSubmitting = true;
+		submitStatus = '';
+
+		try {
+			const response = await fetch('https://formspree.io/f/meoopjjv', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(formData)
+			});
+
+			if (response.ok) {
+				submitStatus = $language === 'no' ? 'Melding sendt!' : 'Message sent!';
+				formData = {
+					name: '',
+					email: '',
+					message: ''
+				};
+			} else {
+				submitStatus = $language === 'no' ? 'Noe gikk galt. Prøv igjen.' : 'Something went wrong. Please try again.';
+			}
+		} catch (error) {
+			submitStatus = $language === 'no' ? 'Kunne ikke sende melding. Sjekk internettforbindelsen.' : 'Could not send message. Check your internet connection.';
+		}
+
+		isSubmitting = false;
 	}
 </script>
 
 <div class="contact-container">
-	<h1>{t.contact.title}</h1>
-	<p class="contact-intro">{t.contact.intro}</p>
+	<div class="contact-header">
+		<h1>{t.contact.title}</h1>
+		<p>{t.contact.description}</p>
+	</div>
 
 	<div class="contact-content">
 		<div class="contact-info">
-			<h2>{t.contact.title}</h2>
+			<h2>{t.contact.getInTouch}</h2>
 			<div class="info-item">
-				<span class="label">{t.contact.name}:</span>
-				<span>Daniel Johan Sørby</span>
-			</div>
-			<div class="info-item">
-				<span class="label">{t.contact.email}:</span>
-				<a href="mailto:kontakt@danieljsorby.no">kontakt@danieljsorby.no</a>
-			</div>
-			<div class="info-item">
-				<span class="label">{t.contact.location}:</span>
+				<span class="label">{t.contact.location}</span>
 				<span>Oslo, Norge</span>
 			</div>
+			<div class="info-item">
+				<span class="label">{t.contact.email}</span>
+				<a href="mailto:danieljohansorby@gmail.com">danieljohansorby@gmail.com</a>
+			</div>
 			<div class="social-links">
-				<a href="https://github.com/danieljsorby" target="_blank" rel="noopener noreferrer">GitHub</a>
-				<a href="https://linkedin.com/in/yourusername" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-				<a href="https://twitter.com/yourusername" target="_blank" rel="noopener noreferrer">Twitter</a>
+				<a href="https://github.com/DanielJSorby" target="_blank" rel="noopener noreferrer">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+					</svg>
+					GitHub
+				</a>
+				<a href="https://www.linkedin.com/in/daniel-johan-s%C3%B8rby-b8b3b4293/" target="_blank" rel="noopener noreferrer">
+					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+						<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+						<rect x="2" y="9" width="4" height="12"></rect>
+						<circle cx="4" cy="4" r="2"></circle>
+					</svg>
+					LinkedIn
+				</a>
 			</div>
 		</div>
 
@@ -54,6 +87,8 @@
 					id="name"
 					bind:value={formData.name}
 					required
+					placeholder={$language === 'no' ? 'Skriv navnet ditt her' : 'Enter your name here'}
+					disabled={isSubmitting}
 				/>
 			</div>
 
@@ -64,6 +99,8 @@
 					id="email"
 					bind:value={formData.email}
 					required
+					placeholder={$language === 'no' ? 'Din e-postadresse' : 'Your email address'}
+					disabled={isSubmitting}
 				/>
 			</div>
 
@@ -74,10 +111,24 @@
 					bind:value={formData.message}
 					rows="5"
 					required
+					placeholder={$language === 'no' ? 'Skriv meldingen din her' : 'Write your message here'}
+					disabled={isSubmitting}
 				></textarea>
 			</div>
 
-			<button type="submit">{t.contact.send}</button>
+			{#if submitStatus}
+				<div class="submit-status" class:error={submitStatus.includes('galt') || submitStatus.includes('wrong')}>
+					{submitStatus}
+				</div>
+			{/if}
+
+			<button type="submit" disabled={isSubmitting}>
+				{#if isSubmitting}
+					{$language === 'no' ? 'Sender...' : 'Sending...'}
+				{:else}
+					{t.contact.send}
+				{/if}
+			</button>
 		</form>
 	</div>
 </div>
@@ -98,6 +149,10 @@
 		font-size: clamp(2rem, 5vw, 3rem);
 		color: var(--text-primary);
 		margin-bottom: clamp(1rem, 3vw, 1.5rem);
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
 	}
 
 	.contact-header p {
@@ -105,6 +160,7 @@
 		max-width: 600px;
 		margin: 0 auto;
 		font-size: clamp(1rem, 3vw, 1.2rem);
+		line-height: 1.6;
 	}
 
 	.contact-content {
@@ -117,18 +173,38 @@
 	.contact-info {
 		background-color: var(--bg-secondary);
 		padding: clamp(1.5rem, 4vw, 2rem);
-		border-radius: 12px;
+		border-radius: 20px;
 		box-shadow: var(--card-shadow);
+		border: 2px solid transparent;
+		transition: all 0.3s ease;
+	}
+
+	.contact-info:hover {
+		border-color: var(--accent-primary);
+		transform: translateY(-4px);
 	}
 
 	.contact-info h2 {
 		color: var(--text-primary);
 		font-size: clamp(1.5rem, 4vw, 2rem);
 		margin-bottom: clamp(1.5rem, 4vw, 2rem);
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+		-webkit-background-clip: text;
+		background-clip: text;
+		-webkit-text-fill-color: transparent;
 	}
 
 	.info-item {
 		margin-bottom: clamp(1rem, 3vw, 1.5rem);
+		padding: 1rem;
+		background: var(--bg-primary);
+		border-radius: 12px;
+		transition: all 0.3s ease;
+	}
+
+	.info-item:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--card-shadow);
 	}
 
 	.info-item .label {
@@ -142,6 +218,11 @@
 	.info-item a {
 		color: var(--text-primary);
 		font-size: clamp(1rem, 3vw, 1.2rem);
+		text-decoration: none;
+	}
+
+	.info-item a:hover {
+		color: var(--accent-primary);
 	}
 
 	.social-links {
@@ -152,119 +233,175 @@
 	}
 
 	.social-links a {
-		color: var(--accent-primary);
+		color: var(--text-primary);
 		text-decoration: none;
 		font-size: clamp(0.9rem, 2.5vw, 1rem);
 		display: inline-flex;
 		align-items: center;
+		
 		gap: 0.5rem;
+		padding: 0.75rem 1rem;
+		background: var(--bg-primary);
+		border-radius: 12px;
 		transition: all 0.3s ease;
 	}
 
 	.social-links a:hover {
-		color: var(--accent-secondary);
+		color: var(--accent-primary);
 		transform: translateY(-2px);
+		box-shadow: var(--card-shadow);
+	}
+
+	.social-links svg {
+		transition: transform 0.3s ease;
+	}
+
+	.social-links a:hover svg {
+		transform: scale(1.1);
 	}
 
 	.contact-form {
 		background-color: var(--bg-secondary);
 		padding: clamp(1.5rem, 4vw, 2rem);
-		border-radius: 12px;
+		border-radius: 20px;
 		box-shadow: var(--card-shadow);
-		border-left: 4px solid var(--accent-primary);
+		border: 2px solid transparent;
+		transition: all 0.3s ease;
+	}
+
+	.contact-form:hover {
+		border-color: var(--accent-primary);
+		transform: translateY(-4px);
 	}
 
 	.form-group {
-		margin-bottom: clamp(1.5rem, 4vw, 2rem);
+		margin-bottom: 1.5rem;
 	}
 
-	label {
+	.form-group label {
 		display: block;
 		margin-bottom: 0.5rem;
-		font-weight: 500;
 		color: var(--text-primary);
 		font-size: clamp(0.9rem, 2.5vw, 1rem);
 	}
 
-	input,
-	textarea {
+	.form-group input,
+	.form-group textarea {
 		width: 100%;
-		padding: clamp(0.75rem, 2vw, 1rem);
-		border-radius: 8px;
-		border: 2px solid var(--text-secondary);
-		background-color: var(--bg-primary);
+		padding: 0.75rem 1rem;
+		border: 2px solid var(--bg-primary);
+		border-radius: 12px;
+		background: var(--bg-primary);
 		color: var(--text-primary);
 		font-size: clamp(0.9rem, 2.5vw, 1rem);
 		transition: all 0.3s ease;
 	}
 
-	input:focus,
-	textarea:focus {
+	.form-group input:focus,
+	.form-group textarea:focus {
 		outline: none;
 		border-color: var(--accent-primary);
 		box-shadow: 0 0 0 2px rgba(var(--accent-primary-rgb), 0.1);
 	}
 
-	textarea {
-		min-height: 150px;
-		resize: vertical;
+	.form-group input::placeholder,
+	.form-group textarea::placeholder {
+		color: var(--text-secondary);
+		opacity: 0.7;
 	}
 
 	button {
-		background-color: var(--accent-primary);
+		width: 100%;
+		padding: 1rem;
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 		color: white;
-		padding: clamp(0.75rem, 2vw, 1rem) clamp(1.5rem, 4vw, 2rem);
 		border: none;
-		border-radius: 8px;
-		font-size: clamp(0.9rem, 2.5vw, 1rem);
-		font-weight: 500;
+		border-radius: 12px;
+		font-size: clamp(1rem, 3vw, 1.1rem);
+		font-weight: 600;
 		cursor: pointer;
 		transition: all 0.3s ease;
+		position: relative;
+		overflow: hidden;
+	}
+
+	button::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
 		width: 100%;
+		height: 100%;
+		background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+		opacity: 0;
+		transition: opacity 0.3s ease;
 	}
 
 	button:hover {
-		background-color: var(--accent-secondary);
 		transform: translateY(-2px);
 		box-shadow: 0 5px 15px rgba(var(--accent-primary-rgb), 0.2);
+	}
+
+	button:hover::before {
+		opacity: 1;
 	}
 
 	@media (max-width: 768px) {
 		.contact-content {
 			grid-template-columns: 1fr;
-			gap: clamp(1.5rem, 4vw, 2rem);
 		}
 
-		.contact-info {
-			order: 2;
-		}
-
+		.contact-info,
 		.contact-form {
-			order: 1;
+			transform: none;
 		}
 
-		.social-links {
-			justify-content: center;
+		.contact-info:hover,
+		.contact-form:hover {
+			transform: translateY(-2px);
 		}
 	}
 
 	@media (max-width: 480px) {
-		.contact-header {
-			margin-bottom: clamp(1.5rem, 4vw, 2rem);
-		}
-
-		.info-item {
-			text-align: center;
-		}
-
 		.social-links {
 			flex-direction: column;
-			align-items: center;
-			gap: 0.75rem;
 		}
 
-		button {
-			padding: clamp(0.75rem, 2vw, 1rem);
+		.social-links a {
+			width: 100%;
+			justify-content: center;
 		}
+	}
+
+	.submit-status {
+		margin-bottom: 1rem;
+		padding: 0.75rem 1rem;
+		border-radius: 12px;
+		background: var(--accent-primary);
+		color: white;
+		text-align: center;
+		font-size: 0.9rem;
+		opacity: 0;
+		animation: fadeIn 0.3s ease forwards;
+	}
+
+	.submit-status.error {
+		background: #dc3545;
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(-10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	button:disabled {
+		opacity: 0.7;
+		cursor: not-allowed;
 	}
 </style> 

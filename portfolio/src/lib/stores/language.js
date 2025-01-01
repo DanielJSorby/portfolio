@@ -22,13 +22,12 @@ export const translations = {
 			contact: "Kontakt",
 		},
 		hero: {
-			title: "Hei, Jeg er Daniel",
-			subtitle: "En Full-Stack Utvikler & Designer",
+			title: "Daniel Johan Sørby",
+			subtitle: "Full-Stack Utvikler",
 		},
 		projects: {
-			title: "Mine Prosjekter",
-			description:
-				"Her er en samling av mitt nylige arbeid og personlige prosjekter",
+			title: "Prosjekter",
+			description: "Her er noen av prosjektene jeg har jobbet med.",
 			viewProject: "Se Prosjekt",
 		},
 		about: {
@@ -38,13 +37,15 @@ export const translations = {
 			education: "Utdanning",
 		},
 		contact: {
-			title: "Ta Kontakt",
-			intro: "Jeg er alltid åpen for nye muligheter og samarbeid. Ta gjerne kontakt!",
+			title: "Kontakt Meg",
+			description:
+				"Ta gjerne kontakt om du har noen spørsmål eller vil samarbeide!",
+			getInTouch: "Kontaktinformasjon",
 			name: "Navn",
 			email: "E-post",
 			message: "Melding",
 			send: "Send Melding",
-			location: "Sted",
+			location: "Lokasjon",
 		},
 		footer: {
 			rights: "Alle rettigheter reservert.",
@@ -63,13 +64,12 @@ export const translations = {
 			contact: "Contact",
 		},
 		hero: {
-			title: "Hi, I'm Daniel",
-			subtitle: "A Full-Stack Developer & Designer",
+			title: "Daniel Johan Sørby",
+			subtitle: "Full-Stack Developer",
 		},
 		projects: {
-			title: "My Projects",
-			description:
-				"Here's a collection of my recent work and personal projects",
+			title: "Projects",
+			description: "Here are some of the projects I have worked on.",
 			viewProject: "View Project",
 		},
 		about: {
@@ -79,8 +79,10 @@ export const translations = {
 			education: "Education",
 		},
 		contact: {
-			title: "Get in Touch",
-			intro: "I'm always open to new opportunities and collaborations. Feel free to reach out!",
+			title: "Contact Me",
+			description:
+				"Feel free to reach out if you have any questions or want to collaborate!",
+			getInTouch: "Get in Touch",
 			name: "Name",
 			email: "Email",
 			message: "Message",
