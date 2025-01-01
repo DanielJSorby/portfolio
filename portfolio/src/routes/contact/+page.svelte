@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { language, translations } from '$lib/stores/language';
 
 	$: t = translations[$language];
@@ -12,7 +12,7 @@
 	let isSubmitting = false;
 	let submitStatus = '';
 
-	async function handleSubmit(e) {
+	async function handleSubmit(e: SubmitEvent) {
 		e.preventDefault();
 		isSubmitting = true;
 		submitStatus = '';
@@ -59,7 +59,7 @@
 			</div>
 			<div class="info-item">
 				<span class="label">{t.contact.email}</span>
-				<a href="mailto:danieljohansorby@gmail.com">danieljohansorby@gmail.com</a>
+				<a href="mailto:kontakt@danielsorby.no">kontakt@danielsorby.no</a>
 			</div>
 			<div class="social-links">
 				<a href="https://github.com/DanielJSorby" target="_blank" rel="noopener noreferrer">
@@ -68,7 +68,7 @@
 					</svg>
 					GitHub
 				</a>
-				<a href="https://www.linkedin.com/in/daniel-johan-s%C3%B8rby-b8b3b4293/" target="_blank" rel="noopener noreferrer">
+				<a href="https://www.linkedin.com/in/daniel-johan-s%C3%B8rby-4a3aab2ab/" target="_blank" rel="noopener noreferrer">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
 						<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
 						<rect x="2" y="9" width="4" height="12"></rect>
