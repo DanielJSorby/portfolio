@@ -22,6 +22,35 @@
 		'Figma'
 	];
 
+	const featuredProjects = [
+		{
+			title: {
+				no: 'Dasi GPT',
+				en: 'Dasi GPT'
+			},
+			description: {
+				no: 'En ai chatbot som hjelper deg med alt du trenger!',
+				en: 'An ai chatbot that helps you with everything you need!'
+			},
+			technologies: ['Svelte Kit', 'TypeScript', 'OpenAI', 'MySQL', 'Linux'],
+			image: 'https://picsum.photos/800/400?random=1',
+			link: 'https://github.com/DanielJSorby/DASI'
+		},
+		{
+			title: {
+				no: 'Prime Wheels',
+				en: 'Prime Wheels'
+			},
+			description: {
+				no: 'Et bilnettsted for å kjøpe biler. Laget som en skoleprosjekt.',
+				en: 'A car website for buying cars. Made as a school project.'
+			},
+			technologies: ['HTML', 'CSS', 'JavaScript'],
+			image: 'https://picsum.photos/800/400?random=2',
+			link: 'https://github.com/DanielJSorby/DanielOgSimen'
+		}
+	];
+
 	let sectionsVisible = {
 		projects: false
 	};
@@ -84,13 +113,23 @@
 <section class="featured">
 	<h2>{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
 	<div class="projects-grid">
-		{#each [1, 2] as projectNum, i}
+		{#each featuredProjects as project}
 			<div class="project-card">
-				<h3>{$language === 'no' ? `Prosjekt ${projectNum}` : `Project ${projectNum}`}</h3>
-				<p>{$language === 'no' 
-					? 'Beskrivelse av ditt fantastiske prosjekt kommer her.'
-					: 'Description of your amazing project goes here.'}</p>
-				<a href="/projects">{$language === 'no' ? 'Les Mer' : 'Read More'}</a>
+				<div class="project-image">
+					<img src={project.image} alt={project.title[$language]} />
+				</div>
+				<div class="project-content">
+					<h3>{project.title[$language]}</h3>
+					<p>{project.description[$language]}</p>
+					<div class="tech-stack">
+						{#each project.technologies as tech}
+							<span class="tech-tag">{tech}</span>
+						{/each}
+					</div>
+					<a href={project.link} target="_blank" rel="noopener noreferrer">
+						{$language === 'no' ? 'Les Mer' : 'Read More'} →
+					</a>
+				</div>
 			</div>
 		{/each}
 	</div>
@@ -287,6 +326,7 @@
 		padding: 0 2rem;
 		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
 		-webkit-background-clip: text;
+		background-clip: text;
 		-webkit-text-fill-color: transparent;
 	}
 
@@ -399,34 +439,94 @@
 
 	.project-card {
 		background-color: var(--bg-secondary);
-		padding: clamp(1.25rem, 3vw, 2rem);
-		border-radius: 8px;
+		border-radius: 20px;
 		box-shadow: var(--card-shadow);
-		border-left: 4px solid var(--accent-primary);
-		transition: transform 0.3s ease;
+		overflow: hidden;
+		transition: all 0.3s ease;
+		border: 2px solid transparent;
+		position: relative;
+		z-index: 1;
+		width: 100%;
+	}
+
+	.project-card::before {
+		content: '';
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			45deg,
+			var(--accent-primary),
+			var(--accent-secondary)
+		);
+		z-index: -1;
+		opacity: 0;
+		transition: opacity 0.3s ease;
 	}
 
 	.project-card:hover {
-		transform: translateY(-4px);
+		transform: translateY(-8px) rotate(1deg);
+		border-color: var(--accent-primary);
 	}
 
-	.project-card h3 {
+	.project-card:hover::before {
+		opacity: 0.1;
+	}
+
+	.project-image {
+		width: 100%;
+		height: 200px;
+		overflow: hidden;
+		border-radius: 18px 18px 0 0;
+	}
+
+	.project-image img {
+		width: 100%;
+		height: 100%;
+		object-fit: cover;
+		transition: transform 0.3s ease;
+	}
+
+	.project-card:hover .project-image img {
+		transform: scale(1.05);
+	}
+
+	.project-content {
+		padding: 1.5rem;
+	}
+
+	.project-content h3 {
 		color: var(--text-primary);
+		margin-bottom: 1rem;
 		font-size: clamp(1.25rem, 4vw, 1.5rem);
-		margin-bottom: clamp(0.5rem, 2vw, 1rem);
 	}
 
-	.project-card p {
-		font-size: clamp(0.9rem, 2.5vw, 1rem);
-		margin-bottom: clamp(1rem, 3vw, 1.5rem);
+	.project-content p {
+		color: var(--text-secondary);
+		margin-bottom: 1rem;
+		font-size: clamp(0.9rem, 3vw, 1rem);
 	}
 
-	.project-card a {
-		display: inline-block;
-		margin-top: 1rem;
-		text-decoration: none;
-		color: var(--accent-primary);
-		font-weight: 500;
+	.tech-stack {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		margin: 1rem 0;
+	}
+
+	.tech-tag {
+		background-color: var(--nav-bg);
+		color: var(--nav-text);
+		padding: 0.25rem 0.75rem;
+		border-radius: 16px;
+		font-size: clamp(0.75rem, 2vw, 0.875rem);
+		transition: background-color 0.2s;
+	}
+
+	.tech-tag:hover {
+		background-color: var(--accent-primary);
 	}
 
 	.view-all {
