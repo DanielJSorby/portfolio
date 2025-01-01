@@ -42,6 +42,19 @@
 			technologies: ['HTML', 'CSS', 'JavaScript'],
 			image: 'https://picsum.photos/800/400?random=3',
 			link: 'https://github.com/DanielJSorby/imdb'
+		},
+		{
+			title: {
+				no: 'Flow',
+				en: 'Flow'
+			},
+			description: {
+				no: 'Nettsiden til energidrikken flow. Laget som et bedriftprosjekt på skolen',
+				en: 'The website for the energy drink flow. Created as a business project at school'
+			},
+			technologies: ['Svelte Kit', 'Json', 'JavaScript'],
+			image: 'https://picsum.photos/800/400?random=4',
+			link: 'https://github.com/DanielJSorby/flow-svelte'
 		}
 	];
 </script>
