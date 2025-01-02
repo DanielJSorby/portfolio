@@ -1,6 +1,8 @@
 <script>
 	import { language, translations } from '$lib/stores/language';
 	import { techColors } from '$lib/utils/techColors';
+	import { page } from '$app/stores';
+	import { onMount } from 'svelte';
 	
 	$: t = translations[$language];
 
@@ -76,6 +78,13 @@
 	const allTechnologies = [...new Set(projects.flatMap(p => p.technologies))].sort();
 	
 	let selectedTech = '';
+
+	onMount(() => {
+		const techParam = $page.url.searchParams.get('tech');
+		if (techParam && allTechnologies.includes(techParam)) {
+			selectedTech = techParam;
+		}
+	});
 
 	$: filteredProjects = selectedTech 
 		? projects.filter(project => project.technologies.includes(selectedTech))

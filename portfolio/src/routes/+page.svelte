@@ -3,6 +3,7 @@
 	import { startHeroAnimation } from '$lib/stores/animation';
 	import { techColors } from '$lib/utils/techColors';
 	import { onMount } from 'svelte';
+	import { goto } from '$app/navigation';
 	
 	$: t = translations[$language];
 
@@ -52,6 +53,10 @@
 		});
 	}
 
+	function handleSkillClick(skill) {
+		goto(`/projects?tech=${encodeURIComponent(skill.name)}`);
+	}
+
 	onMount(() => {
 		handleScroll();
 		window.addEventListener('scroll', handleScroll);
@@ -88,7 +93,10 @@
 	<div class="skills-carousel">
 		<div class="skills-track">
 			{#each [...skills, ...skills, ...skills, ...skills] as skill}
-				<div class="skill-box" style="--skill-color: {skill.color}">
+				<div class="skill-box" 
+					style="--skill-color: {skill.color}"
+					on:click={() => handleSkillClick(skill)}
+				>
 					{skill.name}
 				</div>
 			{/each}
