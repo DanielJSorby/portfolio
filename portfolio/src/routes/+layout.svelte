@@ -102,15 +102,7 @@
 <nav class:hidden={!isNavVisible}>
 	<div class="nav-container">
 		<a href="/" class="logo">{t.nav.home}</a>
-		<button class="mobile-menu-button" on:click={toggleMobileMenu} aria-label="Toggle menu">
-			<div class="hamburger" class:open={isMobileMenuOpen}>
-				<span></span>
-				<span></span>
-				<span></span>
-			</div>
-		</button>
-		<div class="mobile-menu-overlay" class:open={isMobileMenuOpen} on:click={closeMobileMenu}></div>
-		<div class="nav-links" class:open={isMobileMenuOpen}>
+		<div class="nav-links">
 			<a href="/" on:click={closeMobileMenu}>{t.nav.home}</a>
 			<a href="/projects" on:click={closeMobileMenu}>{t.nav.projects}</a>
 			<a href="/about" on:click={closeMobileMenu}>{t.nav.about}</a>
@@ -118,6 +110,34 @@
 			<div class="nav-controls">
 				<ThemeToggle />
 				<LanguageToggle />
+			</div>
+		</div>
+		<div class="mobile-controls">
+			<div class="mobile-toggles">
+				<ThemeToggle />
+				<LanguageToggle />
+			</div>
+			<button class="mobile-menu-button" on:click={toggleMobileMenu} aria-label="Toggle menu">
+				<div class="hamburger" class:open={isMobileMenuOpen}>
+					<span></span>
+					<span></span>
+					<span></span>
+				</div>
+			</button>
+		</div>
+		<div class="mobile-menu-overlay" class:open={isMobileMenuOpen} on:click={closeMobileMenu}></div>
+		<div class="mobile-menu" class:open={isMobileMenuOpen}>
+			<div class="mobile-menu-wrapper">
+				<div class="mobile-menu-links">
+					<a href="/" on:click={closeMobileMenu}>{t.nav.home}</a>
+					<a href="/projects" on:click={closeMobileMenu}>{t.nav.projects}</a>
+					<a href="/about" on:click={closeMobileMenu}>{t.nav.about}</a>
+					<a href="/contact" on:click={closeMobileMenu}>{t.nav.contact}</a>
+				</div>
+				<div class="mobile-menu-controls">
+					<ThemeToggle />
+					<LanguageToggle />
+				</div>
 			</div>
 		</div>
 	</div>
@@ -419,31 +439,28 @@
 
 		.nav-links {
 			position: fixed;
-			top: 50%;
+			top: 0;
 			left: 0;
 			right: 0;
-			transform: translateY(-50%) translateX(100%);
-			background-color: rgba(var(--nav-bg-rgb), 0.5);
-			backdrop-filter: blur(20px);
-			-webkit-backdrop-filter: blur(20px);
-			display: flex;
+			bottom: 0;
+			background-color: var(--nav-bg);
 			flex-direction: column;
 			justify-content: center;
 			align-items: center;
 			padding: 2rem;
-			gap: clamp(1.5rem, 4vh, 2.5rem);
+			
+			gap: 2rem;
+			transform: translateX(100%);
 			transition: transform 0.3s ease;
 			z-index: 1000;
-			text-align: center;
-			height: 100vh;
 		}
 
 		.nav-links.open {
-			transform: translateY(-50%) translateX(0);
+			transform: translateX(0);
 		}
 
 		.nav-links a {
-			color: var(--accent-primary);
+			color: var(--nav-text);
 			font-size: clamp(1.25rem, 4vw, 1.75rem);
 			font-weight: 600;
 			padding: 0.75rem 1.5rem;
@@ -453,29 +470,20 @@
 			transition: all 0.3s ease;
 			border-radius: 12px;
 			background-color: rgba(var(--nav-bg-rgb), 0.1);
-			backdrop-filter: blur(10px);
-			-webkit-backdrop-filter: blur(10px);
-		}
-
-		.nav-links a::after {
-			display: none;
 		}
 
 		.nav-links a:hover {
-			color: var(--accent-secondary);
+			color: var(--accent-primary);
 			transform: translateY(-2px);
-			background-color: rgba(var(--nav-bg-rgb), 0.3);
+			background-color: rgba(var(--nav-bg-rgb), 0.2);
+		}
+
+		.mobile-controls {
+			display: flex;
 		}
 
 		.nav-controls {
-			margin-top: clamp(2rem, 5vh, 3rem);
-			padding: 1rem 1.5rem;
-			background-color: rgba(var(--nav-bg-rgb), 0.1);
-			border-radius: 12px;
-			backdrop-filter: blur(10px);
-			-webkit-backdrop-filter: blur(10px);
-			display: flex;
-			gap: 1.5rem;
+			display: none;
 		}
 	}
 
@@ -507,7 +515,7 @@
 		right: 0;
 		bottom: 0;
 		background-color: rgba(0, 0, 0, 0.2);
-		backdrop-filter: blur(12px);
+		backdrop-filter: blur(120px);
 		-webkit-backdrop-filter: blur(12px);
 		opacity: 0;
 		transition: opacity 0.3s ease;
@@ -515,42 +523,12 @@
 	}
 
 	@media (max-width: 768px) {
-		.mobile-menu-button {
-			display: block;
-		}
-
-		.mobile-menu-overlay {
-			display: block;
-			pointer-events: none;
-		}
-
-		.mobile-menu-overlay.open {
-			opacity: 1;
-			pointer-events: auto;
-		}
-
-		.nav-links {
-			position: fixed;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			background-color: var(--nav-bg);
-			flex-direction: column;
-			justify-content: center;
-			padding: 2rem;
-			gap: 2rem;
-			transform: translateX(100%);
-			transition: transform 0.3s ease;
-			z-index: 1000;
-		}
-
-		.nav-links.open {
-			transform: translateX(0);
+		.mobile-controls {
+			display: flex;
 		}
 
 		.nav-controls {
-			margin-top: 2rem;
+			display: none;
 		}
 	}
 
@@ -637,6 +615,101 @@
 		to {
 			opacity: 0;
 			visibility: hidden;
+		}
+	}
+
+	.mobile-controls {
+		display: none;
+		align-items: center;
+		gap: 1rem;
+	}
+
+	.mobile-toggles {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	@media (max-width: 768px) {
+		.mobile-controls {
+			display: flex;
+		}
+
+		.nav-controls {
+			display: none;
+		}
+	}
+
+	.mobile-menu {
+		position: fixed;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+		background-color: var(--nav-bg);
+		transform: translateX(100%);
+		transition: transform 0.3s ease;
+		z-index: 1000;
+		display: none;
+	}
+
+	.mobile-menu-wrapper {
+		width: 100%;
+		height: 100vh;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		align-items: center;
+		background-color: var(--nav-bg);
+	}
+
+	.mobile-menu-links {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		padding: 2rem;
+		width: 100%;
+		max-width: 300px;
+	}
+
+	.mobile-menu-controls {
+		display: flex;
+		gap: 1rem;
+		margin-top: 2rem;
+		padding: 1rem;
+		border-radius: 12px;
+	}
+
+	.mobile-menu.open {
+		transform: translateX(0);
+	}
+
+	@media (max-width: 768px) {
+		.nav-links {
+			display: none;
+		}
+
+		.mobile-menu {
+			display: block;
+		}
+
+		.mobile-menu a {
+			color: white;
+			font-size: clamp(1.25rem, 4vw, 1.75rem);
+			font-weight: 600;
+			padding: 0.75rem 1.5rem;
+			width: 100%;
+			text-align: center;
+			transition: all 0.3s ease;
+			border-radius: 12px;
+			background-color: var(--accent-primary);
+			text-decoration: none;
+		}
+
+		.mobile-menu a:hover {
+			background-color: var(--accent-secondary);
+			transform: translateY(-2px);
+			box-shadow: 0 5px 15px rgba(var(--accent-primary-rgb), 0.2);
 		}
 	}
 </style> 
