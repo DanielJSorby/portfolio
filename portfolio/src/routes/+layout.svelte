@@ -101,7 +101,7 @@
 
 <nav class:hidden={!isNavVisible}>
 	<div class="nav-container">
-		<a href="/" class="logo">{t.nav.home}</a>
+		<a href="/" class="logo">Daniel Johan Sørby</a>
 		<div class="nav-links">
 			<a href="/" on:click={closeMobileMenu}>{t.nav.home}</a>
 			<a href="/projects" on:click={closeMobileMenu}>{t.nav.projects}</a>
