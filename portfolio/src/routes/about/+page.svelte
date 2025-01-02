@@ -6,44 +6,40 @@
 
 <div class="about-container">
 	<div class="about-header">
-		<h1>About Me</h1>
+		<h1>{t.about.title}</h1>
 		<div class="profile-section">
 			<img src="https://media.licdn.com/dms/image/v2/D4E03AQGc_J0tcetJPQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1714327384635?e=2147483647&v=beta&t=EU5RNVdbn8Txfu31fSQCrqeJImidBs7-WntxBbKjack" alt="Daniel Johan Sørby" class="profile-image" />
 			<div class="intro">
 				<h2>Daniel Johan Sørby</h2>
-				<p class="title">Full-Stack Utvikler</p>
+				<p class="title">{t.hero.subtitle}</p>
 			</div>
 		</div>
 	</div>
 
 	<section class="about-content">
-		<h3>Background</h3>
+		<h3>{t.about.background}</h3>
 		<p>
-			Write a compelling introduction about yourself here. Share your journey into
-			programming, what drives you, and what you're passionate about in technology.
+			{$language === 'no' 
+				? 'Jeg er en engasjert full-stack utvikler med lidenskap for å skape innovative og brukervennlige løsninger. Min reise innen programmering startet med en sterk interesse for teknologi og et ønske om å bygge ting som gjør en forskjell.'
+				: 'I am a passionate full-stack developer dedicated to creating innovative and user-friendly solutions. My journey in programming began with a strong interest in technology and a desire to build things that make a difference.'}
 		</p>
 
-		<h3>Experience</h3>
+		<h3>{t.about.experience}</h3>
 		<div class="experience-item">
-			<h4>Senior Developer - Company Name</h4>
-			<p class="date">2020 - Present</p>
+			<h4>{$language === 'no' ? 'Freelance Utvikler' : 'Freelance Developer'}</h4>
+			<p class="date">2023 - {$language === 'no' ? 'Nåværende' : 'Present'}</p>
 			<p>
-				Description of your role and key achievements. Highlight important projects
-				and technologies you've worked with.
+				{$language === 'no'
+					? 'Jobber med diverse prosjekter for klienter, med fokus på webutvikling og design. Bruker moderne teknologier som React, Svelte, og Node.js.'
+					: 'Working on various projects for clients, focusing on web development and design. Using modern technologies like React, Svelte, and Node.js.'}
 			</p>
 		</div>
 
-		<div class="experience-item">
-			<h4>Web Developer - Previous Company</h4>
-			<p class="date">2018 - 2020</p>
-			<p>
-				Overview of your responsibilities and accomplishments in this role.
-			</p>
-		</div>
-
-		<h3>Education</h3>
+		<h3>{t.about.education}</h3>
 		<div class="education-item">
-			<h4>Innformasjonsteknologi og Medieproduksjon med spesialisering i Innformasjonsteknologi</h4>
+			<h4>{$language === 'no' 
+				? 'Informasjonsteknologi og Medieproduksjon med spesialisering i Informasjonsteknologi'
+				: 'Information Technology and Media Production with specialization in Information Technology'}</h4>
 			<p class="date">2023 - 2026</p>
 			<p>Elevbakken VGS</p>
 		</div>
