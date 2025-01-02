@@ -74,6 +74,13 @@
 			<p class="date">2023 - 2026</p>
 			<p>Elevbakken VGS</p>
 		</div>
+		<div class="education-item">
+			<h4>{$language === 'no' 
+				? 'Grunnskole'
+				: 'Primary and lower secondary education'}</h4>
+			<p class="date">2013 - 2023</p>
+			<p>Ellingsrudåsen Skole, Ellingrud Skole, Kristelig Gymnasium</p>
+		</div>
 	</section>
 </div>
 
