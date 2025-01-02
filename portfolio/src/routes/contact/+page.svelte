@@ -130,11 +130,13 @@
 			{/if}
 
 			<button type="submit" disabled={isSubmitting}>
-				{#if isSubmitting}
-					{$language === 'no' ? 'Sender...' : 'Sending...'}
-				{:else}
-					{t.contact.send}
-				{/if}
+				<span class="button-content">
+					{#if isSubmitting}
+						{$language === 'no' ? 'Sender...' : 'Sending...'}
+					{:else}
+						{t.contact.send}
+					{/if}
+				</span>
 			</button>
 		</form>
 	</div>
@@ -351,6 +353,11 @@
 
 	button:hover::before {
 		opacity: 1;
+	}
+
+	.button-content {
+		position: relative;
+		z-index: 1;
 	}
 
 	@media (max-width: 768px) {
