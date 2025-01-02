@@ -16,7 +16,8 @@
 				"MySQL",
 				"Linux",
 				"Git",
-				"Markdown"
+				"Markdown",
+				"JavaScript"
 			],
 			"image": "https://picsum.photos/800/400?random=1",
 			"link": "https://github.com/DanielJSorby/DASI"
@@ -138,6 +139,19 @@
 			],
 			"image": "https://picsum.photos/800/400?random=9",
 			"link": "https://github.com/DanielJSorby/portfolio"
+		},
+		{
+			"title": {
+				"no": "Viking Klan Nettside",
+				"en": "Viking Clan Website"
+			},
+			"description": {
+				"no": "En nettside for en viking klan, laget i Dannmark som et skoleproject",
+				"en": "A website for a Viking clan, created in Denmark as a school project."
+			},
+			"technologies": ["Svelte Kit", "Json", "HTML", "CSS", "JavaScript"],
+			"image": "https://picsum.photos/800/400?random=10",
+			"link": "https://github.com/DanielJSorby/Dannmark"
 		}
 	]
 }
