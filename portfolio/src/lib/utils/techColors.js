@@ -2,7 +2,6 @@ export const techColors = {
 	JavaScript: "#f1e05a",
 	TypeScript: "#3178c6",
 	Linux: "#89e051",
-	Svelte: "#ff3e00",
 	"Svelte Kit": "#ff3e00",
 	HTML: "#e34c26",
 	CSS: "#563d7c",
