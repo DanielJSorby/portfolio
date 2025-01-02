@@ -16,8 +16,34 @@
 	let isNavVisible = true;
 	let isMobileMenuOpen = false;
 	let isLoading = true;
+	let loadingProgress = 0;
 
-	onMount(() => {
+	function waitForImages() {
+		return new Promise((resolve) => {
+			const images = document.querySelectorAll('img');
+			let loadedImages = 0;
+			const totalImages = images.length;
+
+			function updateProgress() {
+				loadedImages++;
+				loadingProgress = (loadedImages / totalImages) * 100;
+				if (loadedImages === totalImages) resolve();
+			}
+
+			if (totalImages === 0) resolve();
+
+			images.forEach(img => {
+				if (img.complete) {
+					updateProgress();
+				} else {
+					img.addEventListener('load', updateProgress);
+					img.addEventListener('error', updateProgress);
+				}
+			});
+		});
+	}
+
+	onMount(async () => {
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
 			isNavVisible = lastScrollY > currentScrollY || currentScrollY < 50;
@@ -25,18 +51,21 @@
 		};
 
 		window.addEventListener('scroll', handleScroll, { passive: true });
-
-		// Loading animation
-		setTimeout(() => {
-			isLoading = false;
-			document.body.style.overflow = '';
-			// Start hero animation after loading screen fades out
-			setTimeout(() => {
-				startHeroAnimation.set(true);
-			}, 500);
-		}, 2500);
-
 		document.body.style.overflow = 'hidden';
+
+		// Simulate minimum loading time and wait for images
+		await Promise.all([
+			waitForImages(),
+			new Promise(resolve => setTimeout(resolve, 1000)) // Minimum 1 second loading time
+		]);
+
+		isLoading = false;
+		document.body.style.overflow = '';
+		
+		// Start hero animation after loading screen fades out
+		setTimeout(() => {
+			startHeroAnimation.set(true);
+		}, 500);
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
@@ -86,7 +115,7 @@
 				<span class="letter" style="--delay: 1.7s">y</span>
 			</div>
 			<div class="loading-bar">
-				<div class="loading-progress"></div>
+				<div class="loading-progress" style="transform: scaleX({loadingProgress / 100})"></div>
 			</div>
 		</div>
 	</div>

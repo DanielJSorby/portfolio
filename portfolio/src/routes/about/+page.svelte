@@ -1,14 +1,36 @@
 <script>
 	import { language, translations } from '$lib/stores/language';
+	import { onMount } from 'svelte';
 
 	$: t = translations[$language];
+
+	let imageLoaded = false;
+	const profileImage = "https://github.com/DanielJSorby/portfolio/blob/main/portfolio/src/images/Splash%20daniel%20foran%20slottet.png?raw=true";
+
+	onMount(() => {
+		const img = new Image();
+		img.src = profileImage;
+		img.onload = () => {
+			imageLoaded = true;
+		};
+	});
 </script>
 
 <div class="about-container">
 	<div class="about-header">
 		<h1>{t.about.title}</h1>
 		<div class="profile-section">
-			<img src="https://github.com/DanielJSorby/portfolio/blob/main/portfolio/src/images/Splash%20daniel%20foran%20slottet.png?raw=true" alt="Daniel Johan Sørby" class="profile-image" />
+			<div class="profile-image-container">
+				{#if !imageLoaded}
+					<div class="profile-image-placeholder"></div>
+				{/if}
+				<img
+					src={profileImage}
+					alt="Daniel Johan Sørby"
+					class="profile-image"
+					class:loaded={imageLoaded}
+				/>
+			</div>
 			<div class="intro">
 				<h2>Daniel Johan Sørby</h2>
 				<p class="title">{t.hero.subtitle}</p>
@@ -72,18 +94,52 @@
 		gap: clamp(1rem, 3vw, 1.5rem);
 	}
 
-	.profile-image {
+	.profile-image-container {
+		position: relative;
 		width: clamp(150px, 30vw, 200px);
 		height: clamp(150px, 30vw, 200px);
+	}
+
+	.profile-image-placeholder {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		border-radius: 50%;
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+		opacity: 0.5;
+		animation: pulse 1.5s ease-in-out infinite;
+	}
+
+	.profile-image {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
 		border-radius: 50%;
 		object-fit: cover;
 		border: 4px solid var(--accent-primary);
 		box-shadow: 0 5px 15px rgba(var(--accent-primary-rgb), 0.2);
-		transition: transform 0.3s ease;
+		transition: transform 0.3s ease, opacity 0.3s ease;
+		opacity: 0;
 	}
 
-	.profile-image:hover {
-		transform: scale(1.05);
+	.profile-image.loaded {
+		opacity: 1;
+	}
+
+	@keyframes pulse {
+		0% {
+			opacity: 0.5;
+		}
+		50% {
+			opacity: 0.3;
+		}
+		100% {
+			opacity: 0.5;
+		}
 	}
 
 	.intro {
