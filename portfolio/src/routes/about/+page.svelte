@@ -49,11 +49,20 @@
 		<h3>{t.about.experience}</h3>
 		<div class="experience-item">
 			<h4>{$language === 'no' ? 'Freelance Utvikler' : 'Freelance Developer'}</h4>
-			<p class="date">2023 - {$language === 'no' ? 'Nåværende' : 'Present'}</p>
+			<p class="date">2020 - {$language === 'no' ? 'Nåværende' : 'Present'}</p>
 			<p>
 				{$language === 'no'
-					? 'Jobber med diverse prosjekter for klienter, med fokus på webutvikling og design. Bruker moderne teknologier som React, Svelte, og Node.js.'
-					: 'Working on various projects for clients, focusing on web development and design. Using modern technologies like React, Svelte, and Node.js.'}
+					? 'Jobber med diverse prosjekter, med fokus på webutvikling og design. Bruker moderne teknologier som React og Svelte.'
+					: 'Working on various projects, focusing on web development and design. Using modern technologies like React, and Svelte.'}
+			</p>
+		</div>
+        <div class="experience-item">
+			<h4>{$language === 'no' ? 'Visuelle Medier NRK' : 'Visual Media NRK'}</h4>
+			<p class="date">2024</p>
+			<p>
+				{$language === 'no'
+					? 'Hjalp til å lage JuleMimre nettsiden på NRK, hvor man kan mimre tilbake til julen når man var liten. Laget i følge med Jobbuke på skolen'
+					: 'Helped create the “JuleMimre” website for NRK, where users can reminisce about Christmas from their childhood. Created as part of the school work experience week.'}
 			</p>
 		</div>
 
