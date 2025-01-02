@@ -8,7 +8,7 @@
 	<div class="about-header">
 		<h1>{t.about.title}</h1>
 		<div class="profile-section">
-			<img src="https://media.licdn.com/dms/image/v2/D4E03AQGc_J0tcetJPQ/profile-displayphoto-shrink_200_200/profile-displayphoto-shrink_200_200/0/1714327384635?e=2147483647&v=beta&t=EU5RNVdbn8Txfu31fSQCrqeJImidBs7-WntxBbKjack" alt="Daniel Johan Sørby" class="profile-image" />
+			<img src="/src/images/Splash daniel foran slottet.png" alt="Daniel Johan Sørby" class="profile-image" />
 			<div class="intro">
 				<h2>Daniel Johan Sørby</h2>
 				<p class="title">{t.hero.subtitle}</p>
