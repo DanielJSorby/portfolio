@@ -12,20 +12,10 @@
 
 	$: t = translations[$language];
 
-	let lastScrollY = 0;
-	let isNavVisible = true;
 	let isMobileMenuOpen = false;
 	let isLoading = true;
 
 	onMount(() => {
-		const handleScroll = () => {
-			const currentScrollY = window.scrollY;
-			isNavVisible = lastScrollY > currentScrollY || currentScrollY < 50;
-			lastScrollY = currentScrollY;
-		};
-
-		window.addEventListener('scroll', handleScroll, { passive: true });
-
 		// Loading animation
 		setTimeout(() => {
 			isLoading = false;
@@ -37,10 +27,6 @@
 		}, 2500);
 
 		document.body.style.overflow = 'hidden';
-
-		return () => {
-			window.removeEventListener('scroll', handleScroll);
-		};
 	});
 
 	function toggleMobileMenu() {
@@ -99,7 +85,7 @@
 	<div class="shape shape-3"></div>
 </div>
 
-<nav class:hidden={!isNavVisible}>
+<nav>
 	<div class="nav-container">
 		<a href="/" class="logo">{t.nav.home}</a>
 		<div class="nav-links">
@@ -214,7 +200,6 @@
 		left: 0;
 		right: 0;
 		z-index: 1000;
-		transition: transform 0.3s ease;
 		backdrop-filter: blur(5px);
 	}
 
