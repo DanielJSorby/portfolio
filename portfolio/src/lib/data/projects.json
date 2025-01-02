@@ -70,7 +70,7 @@
 				"no": "Et prosjekt for å lære Flask, med et enkelt innloggingsskjema som sjekker mot en bruker-JSON-fil.",
 				"en": "A project to learn Flask, featuring a simple login form that validates against a user JSON file."
 			},
-			"technologies": ["Python", "Json", "JavaScript", "HTML"],
+			"technologies": ["Python", "Json", "JavaScript", "HTML", "Flask"],
 			"image": "https://picsum.photos/800/400?random=5",
 			"link": "https://github.com/DanielJSorby/flask"
 		},
