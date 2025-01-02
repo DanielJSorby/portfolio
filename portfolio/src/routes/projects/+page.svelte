@@ -71,6 +71,19 @@
 			link: 'https://github.com/DanielJSorby/flask'
 		}
 	];
+
+	// Get unique technologies from all projects
+	const allTechnologies = [...new Set(projects.flatMap(p => p.technologies))].sort();
+	
+	let selectedTech = '';
+
+	$: filteredProjects = selectedTech 
+		? projects.filter(project => project.technologies.includes(selectedTech))
+		: projects;
+
+	function selectTechnology(tech) {
+		selectedTech = selectedTech === tech ? '' : tech;
+	}
 </script>
 
 <div class="projects-header">
@@ -78,8 +91,23 @@
 	<p>{t.projects.description}</p>
 </div>
 
+<div class="tech-filter">
+	<div class="tech-buttons">
+		{#each allTechnologies as tech}
+			<button 
+				class="tech-button" 
+				class:active={selectedTech === tech}
+				style="--tech-color: {techColors[tech] || '#666666'}"
+				on:click={() => selectTechnology(tech)}
+			>
+				{tech}
+			</button>
+		{/each}
+	</div>
+</div>
+
 <div class="projects-container">
-	{#each projects as project}
+	{#each filteredProjects as project}
 		<div class="project-card">
 			<div class="project-image">
 				<img src={project.image} alt={project.title[$language]} />
@@ -89,7 +117,12 @@
 				<p>{project.description[$language]}</p>
 				<div class="tech-stack">
 					{#each project.technologies as tech}
-						<span class="tech-tag" style="--tech-color: {techColors[tech] || '#666666'}">
+						<span 
+							class="tech-tag" 
+							class:highlight={selectedTech === tech}
+							style="--tech-color: {techColors[tech] || '#666666'}"
+							on:click={() => selectTechnology(tech)}
+						>
 							{tech}
 						</span>
 					{/each}
@@ -121,11 +154,45 @@
 		font-size: clamp(1rem, 3vw, 1.2rem);
 	}
 
+	.tech-filter {
+		max-width: 1200px;
+		margin: 0 auto 2rem;
+		padding: 0 1rem;
+	}
+
+	.tech-buttons {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5rem;
+		justify-content: center;
+	}
+
+	.tech-button {
+		background: var(--bg-secondary);
+		color: var(--text-primary);
+		border: none;
+		padding: 0.5rem 1rem;
+		border-radius: 20px;
+		cursor: pointer;
+		font-size: 0.9rem;
+		transition: all 0.3s ease;
+		border-left: 3px solid var(--tech-color);
+	}
+
+	.tech-button:hover, .tech-button.active {
+		background-color: var(--tech-color);
+		color: white;
+		transform: translateY(-2px);
+		box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+	}
+
 	.projects-container {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 		gap: 2rem;
 		padding: 0 1rem;
+		max-width: 1200px;
+		margin: 0 auto;
 	}
 
 	.project-card {
@@ -140,30 +207,9 @@
 		width: 100%;
 	}
 
-	.project-card::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(
-			45deg,
-			var(--accent-primary),
-			var(--accent-secondary)
-		);
-		z-index: -1;
-		opacity: 0;
-		transition: opacity 0.3s ease;
-	}
-
 	.project-card:hover {
-		transform: translateY(-8px) rotate(1deg);
+		transform: translateY(-8px);
 		border-color: var(--accent-primary);
-	}
-
-	.project-card:hover::before {
-		opacity: 0.1;
 	}
 
 	.project-image {
@@ -215,9 +261,10 @@
 		font-size: clamp(0.75rem, 2vw, 0.875rem);
 		transition: all 0.3s ease;
 		border-left: 3px solid var(--tech-color);
+		cursor: pointer;
 	}
 
-	.tech-tag:hover {
+	.tech-tag:hover, .tech-tag.highlight {
 		background-color: var(--tech-color);
 		color: white;
 		transform: translateY(-2px);
@@ -239,7 +286,7 @@
 
 	@media (max-width: 768px) {
 		.project-card:hover {
-			transform: translateY(-4px) rotate(0deg);
+			transform: translateY(-4px);
 		}
 
 		.project-image {
@@ -262,6 +309,15 @@
 
 		.project-image {
 			height: 160px;
+		}
+
+		.tech-buttons {
+			gap: 0.35rem;
+		}
+
+		.tech-button {
+			padding: 0.35rem 0.75rem;
+			font-size: 0.8rem;
 		}
 	}
 </style> 
