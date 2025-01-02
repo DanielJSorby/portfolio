@@ -16,7 +16,7 @@
 				no: 'En ai chatbot som hjelper deg med alt du trenger!',
 				en: 'An ai chatbot that helps you with everything you need!'
 			},
-			technologies: ['Svelte Kit', 'TypeScript', 'OpenAI', 'MySQL', 'Linux'],
+			technologies: ['Svelte Kit', 'TypeScript', 'OpenAI', 'MySQL', 'Linux', 'Git'],
 			image: 'https://picsum.photos/800/400?random=1',
 			link: 'https://github.com/DanielJSorby/DASI'
 		},
@@ -70,6 +70,19 @@
 			},
 			technologies: ['Python', 'Json', 'JavaScript', 'HTML'],
 			image: 'https://picsum.photos/800/400?random=5',
+			link: 'https://github.com/DanielJSorby/flask'
+		},
+        {
+			title: {
+				no: 'Lære React',
+				en: 'Learn React'
+			},
+			description: {
+				no: 'Prosjektet jeg brukte når jeg lærte meg React',
+				en: 'The project I used to learn React'
+			},
+			technologies: ['React', 'TypeScript', 'CSS', 'HTML'],
+			image: 'https://picsum.photos/800/400?random=6',
 			link: 'https://github.com/DanielJSorby/flask'
 		}
 	];
