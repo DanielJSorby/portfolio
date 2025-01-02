@@ -450,16 +450,6 @@
 		border-color: var(--accent-primary);
 	}
 
-	.animate-on-scroll {
-		opacity: 1;
-		transform: none;
-	}
-
-	.animate-on-scroll.visible {
-		opacity: 1;
-		transform: none;
-	}
-
 	.project-image {
 		width: 100%;
 		height: 200px;
@@ -585,28 +575,6 @@
 			width: 100%;
 			max-width: 300px;
 			justify-content: center;
-		}
-	}
-
-	.animate-on-scroll {
-		opacity: 0;
-		transform: translateY(30px);
-		transition: opacity 0.8s ease, transform 0.8s ease;
-	}
-
-	.animate-on-scroll.visible {
-		opacity: 1;
-		transform: translateY(0);
-	}
-
-	@keyframes fadeInUp {
-		from {
-			opacity: 0;
-			transform: translateY(20px);
-		}
-		to {
-			opacity: 1;
-			transform: translateY(0);
 		}
 	}
 </style>
