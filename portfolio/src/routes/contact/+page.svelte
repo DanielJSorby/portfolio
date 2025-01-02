@@ -55,7 +55,14 @@
 			<h2>{t.contact.getInTouch}</h2>
 			<div class="info-item">
 				<span class="label">{t.contact.location}</span>
-				<span>Oslo, Norge</span>
+				<a 
+					href="https://www.google.com/maps/place/Oslo" 
+					target="_blank" 
+					rel="noopener noreferrer"
+					class="location-link"
+				>
+					Oslo, Norge
+				</a>
 			</div>
 			<div class="info-item">
 				<span class="label">{t.contact.email}</span>
@@ -403,5 +410,26 @@
 	button:disabled {
 		opacity: 0.7;
 		cursor: not-allowed;
+	}
+
+	.info-item a {
+		color: var(--text-primary);
+		text-decoration: none;
+		transition: color 0.2s;
+	}
+
+	.info-item a:hover {
+		color: var(--accent-primary);
+	}
+
+	.location-link {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.location-link::before {
+		content: '📍';
+		font-size: 1.2rem;
 	}
 </style> 
