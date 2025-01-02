@@ -43,7 +43,7 @@
 				"no": "En nettside hvor du kan se informasjon om filmer.",
 				"en": "A website where you can see information about movies."
 			},
-			"technologies": ["HTML", "CSS", "JavaScript"],
+			"technologies": ["HTML", "CSS", "JavaScript", "Json"],
 			"image": "https://picsum.photos/800/400?random=3",
 			"link": "https://github.com/DanielJSorby/imdb"
 		},
@@ -117,6 +117,26 @@
 			],
 			"image": "https://picsum.photos/800/400?random=8",
 			"link": "https://github.com/baldurht/infoBakka/tree/main"
+		},
+		{
+			"title": {
+				"no": "Portefølje",
+				"en": "Portfolio"
+			},
+			"description": {
+				"no": "Denne Nettsiden!",
+				"en": "This Website"
+			},
+			"technologies": [
+				"Svelte Kit",
+				"Json",
+				"HTML",
+				"CSS",
+				"JavaScript",
+				"TypeScript"
+			],
+			"image": "https://picsum.photos/800/400?random=9",
+			"link": "https://github.com/DanielJSorby/portfolio"
 		}
 	]
 }
