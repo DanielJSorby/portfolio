@@ -98,6 +98,25 @@
 			"technologies": ["Markdown"],
 			"image": "https://picsum.photos/800/400?random=7",
 			"link": "https://github.com/DanielJSorby/DanielJSorby"
+		},
+		{
+			"title": {
+				"no": "InfoBakka",
+				"en": "InfoBakka"
+			},
+			"description": {
+				"no": "En plattform utviklet som et skoleprosjekt, rettet mot investorer. Den bruker flere API-er for å hente og presentere relevant informasjon tilpasset skoleelevers behov.",
+				"en": "A platform developed as a school project, aimed at investors. It uses multiple APIs to fetch and present relevant information tailored to students' needs."
+			},
+			"technologies": [
+				"Svelte Kit",
+				"Python",
+				"HTML",
+				"CSS",
+				"JavaScript"
+			],
+			"image": "https://picsum.photos/800/400?random=8",
+			"link": "https://github.com/baldurht/infoBakka/tree/main"
 		}
 	]
 }
