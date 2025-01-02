@@ -8,7 +8,7 @@
 	<div class="about-header">
 		<h1>{t.about.title}</h1>
 		<div class="profile-section">
-			<img src="/src/images/Splash daniel foran slottet.png" alt="Daniel Johan Sørby" class="profile-image" />
+			<img src="https://github.com/DanielJSorby/portfolio/blob/main/portfolio/src/images/Splash%20daniel%20foran%20slottet.png?raw=true" alt="Daniel Johan Sørby" class="profile-image" />
 			<div class="intro">
 				<h2>Daniel Johan Sørby</h2>
 				<p class="title">{t.hero.subtitle}</p>
