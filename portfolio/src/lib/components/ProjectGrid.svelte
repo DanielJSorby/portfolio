@@ -1,11 +1,13 @@
 <script lang="ts">
     import ProjectCard from './ProjectCard.svelte';
-    import { projects } from '$lib/data/projects';
+    import projectsData from '$lib/data/projects.json';
     import { language } from '$lib/stores/language';
     import type { Project } from '$lib/types/project';
 
     export let selectedTech: string = '';
     export let limit: number | undefined = undefined;
+
+    const projects: Project[] = projectsData.projects;
 
     $: filteredProjects = selectedTech 
         ? projects.filter((project: Project) => project.technologies.includes(selectedTech))
