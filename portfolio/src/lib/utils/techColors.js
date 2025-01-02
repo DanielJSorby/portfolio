@@ -15,4 +15,5 @@ export const techColors = {
 	React: "#61dafb",
 	Figma: "#8C56FF",
 	OpenAI: "#412991",
+	Markdown: "#083fa1",
 };
