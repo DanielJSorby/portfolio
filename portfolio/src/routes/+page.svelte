@@ -4,6 +4,7 @@
 	import { techColors } from '$lib/utils/techColors';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
+	import GitHubActivity from '$lib/components/GitHubActivity.svelte';
 	
 	$: t = translations[$language];
 
@@ -121,112 +122,115 @@
 	</div>
 </div>
 
+
 <div 
-	class="skills-container" 
-	role="region" 
-	aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
+class="skills-container" 
+role="region" 
+aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
 >
-	<h2 tabindex="0">{$language === 'no' ? 'Ferdigheter' : 'Skills'}</h2>
-	<div class="skills-carousel">
-		<div class="skills-track">
-			{#each [...skills, ...skills, ...skills, ...skills] as skill}
-				<div 
-					class="skill-box" 
-					style="--skill-color: {skill.color}"
-					on:click={() => handleSkillClick(skill)}
-					on:keydown={(e) => e.key === 'Enter' && handleSkillClick(skill)}
-					role="button"
-					tabindex="0"
-					aria-label={$language === 'no' ? `Klikk for å se ${skill.name} prosjekter` : `Click to see ${skill.name} projects`}
-				>
-					{skill.name}
-				</div>
-			{/each}
-		</div>
-	</div>
+<h2 tabindex="0">{$language === 'no' ? 'Ferdigheter' : 'Skills'}</h2>
+<div class="skills-carousel">
+    <div class="skills-track">
+        {#each [...skills, ...skills, ...skills, ...skills] as skill}
+        <div 
+        class="skill-box" 
+        style="--skill-color: {skill.color}"
+        on:click={() => handleSkillClick(skill)}
+        on:keydown={(e) => e.key === 'Enter' && handleSkillClick(skill)}
+        role="button"
+        tabindex="0"
+        aria-label={$language === 'no' ? `Klikk for å se ${skill.name} prosjekter` : `Click to see ${skill.name} projects`}
+        >
+        {skill.name}
+    </div>
+    {/each}
+</div>
+</div>
 </div>
 
 <section 
-	class="featured" 
-	role="region" 
-	aria-label={$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}
+class="featured" 
+role="region" 
+aria-label={$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}
 >
-	<h2 tabindex="0">{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
-	<div class="projects-grid">
-		{#each featuredProjects as project}
-			<div 
-				class="project-card" 
-				role="article"
-				aria-label={project.title[$language]}
-			>
-				<div class="project-image">
-					<div class="image-skeleton"></div>
-					<img 
-						src={project.image} 
-						alt={project.title[$language]} 
-						loading="lazy"
-						on:error={handleImageError}
-						on:load={handleImageLoad}
-					/>
-				</div>
-				<div class="project-content">
-					<h3 tabindex="0">{project.title[$language]}</h3>
-					<p tabindex="0">{project.description[$language]}</p>
-					<div 
-						class="tech-stack" 
-						role="list" 
-						aria-label={$language === 'no' ? 'Teknologier brukt' : 'Technologies used'}
-					>
-						{#each project.technologies as tech}
-							<span 
-								class="tech-tag" 
-								style="--tech-color: {getTechColor(tech)}"
-								role="listitem"
-							>
-								{tech}
-							</span>
-						{/each}
-					</div>
-					<a 
-						href={project.link} 
-						target="_blank" 
-						rel="noopener noreferrer"
-						class="project-link"
-						aria-label={$language === 'no' ? `Les mer om ${project.title[$language]} (åpnes i ny fane)` : `Read more about ${project.title[$language]} (opens in new tab)`}
-					>
-						{$language === 'no' ? 'Les Mer' : 'Read More'} 
-						<span aria-hidden="true">→</span>
-					</a>
-				</div>
-			</div>
-		{/each}
-	</div>
-	<div class="view-all">
-		<a 
-			href="/projects" 
-			class="view-all-button"
-			role="button"
-			aria-label={$language === 'no' ? 'Se alle prosjekter' : 'View all projects'}
-		>
-			<span>{$language === 'no' ? 'Se alle prosjekter' : 'View all projects'}</span>
-			<span class="arrow" aria-hidden="true">→</span>
-		</a>
-	</div>
+<h2 tabindex="0">{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
+<div class="projects-grid">
+    {#each featuredProjects as project}
+    <div 
+    class="project-card" 
+    role="article"
+    aria-label={project.title[$language]}
+    >
+    <div class="project-image">
+        <div class="image-skeleton"></div>
+        <img 
+        src={project.image} 
+        alt={project.title[$language]} 
+        loading="lazy"
+        on:error={handleImageError}
+        on:load={handleImageLoad}
+        />
+    </div>
+    <div class="project-content">
+        <h3 tabindex="0">{project.title[$language]}</h3>
+        <p tabindex="0">{project.description[$language]}</p>
+        <div 
+        class="tech-stack" 
+        role="list" 
+        aria-label={$language === 'no' ? 'Teknologier brukt' : 'Technologies used'}
+        >
+        {#each project.technologies as tech}
+        <span 
+        class="tech-tag" 
+        style="--tech-color: {getTechColor(tech)}"
+        role="listitem"
+        >
+        {tech}
+    </span>
+    {/each}
+</div>
+<a 
+href={project.link} 
+target="_blank" 
+rel="noopener noreferrer"
+class="project-link"
+aria-label={$language === 'no' ? `Les mer om ${project.title[$language]} (åpnes i ny fane)` : `Read more about ${project.title[$language]} (opens in new tab)`}
+>
+{$language === 'no' ? 'Les Mer' : 'Read More'} 
+<span aria-hidden="true">→</span>
+</a>
+</div>
+</div>
+{/each}
+</div>
+<div class="view-all">
+    <a 
+    href="/projects" 
+    class="view-all-button"
+    role="button"
+    aria-label={$language === 'no' ? 'Se alle prosjekter' : 'View all projects'}
+    >
+    <span>{$language === 'no' ? 'Se alle prosjekter' : 'View all projects'}</span>
+    <span class="arrow" aria-hidden="true">→</span>
+</a>
+</div>
 </section>
 
+<GitHubActivity />
+
 {#if showScrollTop}
-	<button 
-		class="scroll-top-button" 
-		on:click={scrollToTop}
-		aria-label={$language === 'no' ? 'Tilbake til toppen' : 'Back to top'}
-	>
-		<span aria-hidden="true">↑</span>
-	</button>
+<button 
+class="scroll-top-button" 
+on:click={scrollToTop}
+aria-label={$language === 'no' ? 'Tilbake til toppen' : 'Back to top'}
+>
+<span aria-hidden="true">↑</span>
+</button>
 {/if}
 
 <style>
-	.hero {
-		min-height: 80vh;
+    .hero {
+        min-height: 80vh;
 		display: flex;
 		align-items: center;
 		justify-content: center;
