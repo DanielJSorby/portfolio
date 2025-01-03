@@ -42,6 +42,12 @@
 		projects: false
 	};
 
+	let showScrollTop = false;
+
+	function scrollToTop() {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}
+
 	function handleScroll() {
 		const sections = document.querySelectorAll('.animate-on-scroll');
 		sections.forEach(section => {
@@ -51,6 +57,7 @@
 				section.classList.add('visible');
 			}
 		});
+		showScrollTop = window.scrollY > 500;
 	}
 
 	interface Skill {
@@ -141,6 +148,16 @@
 		</a>
 	</div>
 </section>
+
+{#if showScrollTop}
+	<button 
+		class="scroll-top-button" 
+		on:click={scrollToTop}
+		aria-label="Tilbake til toppen"
+	>
+		↑
+	</button>
+{/if}
 
 <style>
 	.hero {
@@ -580,6 +597,55 @@
 			width: 100%;
 			max-width: 300px;
 			justify-content: center;
+		}
+	}
+
+	.scroll-top-button {
+		position: fixed;
+		bottom: 2rem;
+		right: 2rem;
+		background: var(--accent-primary);
+		color: white;
+		width: 3rem;
+		height: 3rem;
+		border-radius: 50%;
+		border: none;
+		cursor: pointer;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		font-size: 1.5rem;
+		box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+		transition: all 0.3s ease;
+		z-index: 100;
+		opacity: 0;
+		animation: fadeIn 0.3s ease forwards;
+	}
+
+	.scroll-top-button:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+		background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+	}
+
+	@keyframes fadeIn {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+
+	@media (max-width: 768px) {
+		.scroll-top-button {
+			bottom: 1.5rem;
+			right: 1.5rem;
+			width: 2.5rem;
+			height: 2.5rem;
+			font-size: 1.2rem;
 		}
 	}
 </style>
