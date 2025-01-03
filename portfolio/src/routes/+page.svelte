@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
 	import { language, translations } from '$lib/stores/language';
 	import { startHeroAnimation } from '$lib/stores/animation';
 	import { techColors } from '$lib/utils/techColors';
@@ -19,7 +19,7 @@
 				no: 'En ai chatbot som hjelper deg med alt du trenger!',
 				en: 'An ai chatbot that helps you with everything you need!'
 			},
-			technologies: ['Svelte Kit', 'TypeScript', 'OpenAI', 'MySQL', 'Linux'],
+			technologies: ['Svelte Kit', 'TypeScript', 'OpenAI', 'MySQL', 'Linux', 'Git', 'Markdown', 'Javascript'],
 			image: 'https://picsum.photos/800/400?random=1',
 			link: 'https://github.com/DanielJSorby/DASI'
 		},
@@ -53,7 +53,12 @@
 		});
 	}
 
-	function handleSkillClick(skill) {
+	interface Skill {
+		name: string;
+		color: string;
+	}
+
+	function handleSkillClick(skill: Skill) {
 		goto(`/projects?tech=${encodeURIComponent(skill.name)}`);
 	}
 
