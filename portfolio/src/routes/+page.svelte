@@ -69,6 +69,10 @@
 		goto(`/projects?tech=${encodeURIComponent(skill.name)}`);
 	}
 
+	function getTechColor(tech: string): string {
+		return tech in techColors ? techColors[tech as keyof typeof techColors] : '#666666';
+	}
+
 	onMount(() => {
 		handleScroll();
 		window.addEventListener('scroll', handleScroll);
@@ -76,20 +80,25 @@
 	});
 </script>
 
-<div class="hero" class:visible={$startHeroAnimation}>
+<div 
+	class="hero" 
+	class:visible={$startHeroAnimation}
+	role="banner"
+	aria-label={$language === 'no' ? 'Helteseksjon' : 'Hero section'}
+>
 	<div class="hero-content">
-		<h1 class="animated-title">
+		<h1 class="animated-title" tabindex="0">
 			<span class="line line1">{t.hero.title}</span>
 			<span class="line line2">{t.hero.subtitle}</span>
 		</h1>
-		<div class="hero-buttons">
-			<a href="/projects" class="cta-button primary">
+		<div class="hero-buttons" role="navigation" aria-label={$language === 'no' ? 'Hovednavigasjon' : 'Main navigation'}>
+			<a href="/projects" class="cta-button primary" role="button">
 				{t.nav.projects}
-				<span class="arrow">→</span>
+				<span class="arrow" aria-hidden="true">→</span>
 			</a>
-			<a href="/contact" class="cta-button secondary">
+			<a href="/contact" class="cta-button secondary" role="button">
 				{t.nav.contact}
-				<span class="arrow">→</span>
+				<span class="arrow" aria-hidden="true">→</span>
 			</a>
 		</div>
 	</div>
@@ -100,14 +109,23 @@
 	</div>
 </div>
 
-<div class="skills-container">
-	<h2>{$language === 'no' ? 'Ferdigheter' : 'Skills'}</h2>
+<div 
+	class="skills-container" 
+	role="region" 
+	aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
+>
+	<h2 tabindex="0">{$language === 'no' ? 'Ferdigheter' : 'Skills'}</h2>
 	<div class="skills-carousel">
 		<div class="skills-track">
 			{#each [...skills, ...skills, ...skills, ...skills] as skill}
-				<div class="skill-box" 
+				<div 
+					class="skill-box" 
 					style="--skill-color: {skill.color}"
 					on:click={() => handleSkillClick(skill)}
+					on:keydown={(e) => e.key === 'Enter' && handleSkillClick(skill)}
+					role="button"
+					tabindex="0"
+					aria-label={$language === 'no' ? `Klikk for å se ${skill.name} prosjekter` : `Click to see ${skill.name} projects`}
 				>
 					{skill.name}
 				</div>
@@ -116,35 +134,63 @@
 	</div>
 </div>
 
-<section class="featured">
-	<h2>{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
+<section 
+	class="featured" 
+	role="region" 
+	aria-label={$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}
+>
+	<h2 tabindex="0">{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
 	<div class="projects-grid">
 		{#each featuredProjects as project}
-			<div class="project-card">
+			<div 
+				class="project-card" 
+				role="article"
+				aria-label={project.title[$language]}
+			>
 				<div class="project-image">
-					<img src={project.image} alt={project.title[$language]} />
+					<img src={project.image} alt={project.title[$language]} loading="lazy" />
 				</div>
 				<div class="project-content">
-					<h3>{project.title[$language]}</h3>
-					<p>{project.description[$language]}</p>
-					<div class="tech-stack">
+					<h3 tabindex="0">{project.title[$language]}</h3>
+					<p tabindex="0">{project.description[$language]}</p>
+					<div 
+						class="tech-stack" 
+						role="list" 
+						aria-label={$language === 'no' ? 'Teknologier brukt' : 'Technologies used'}
+					>
 						{#each project.technologies as tech}
-							<span class="tech-tag" style="--tech-color: {techColors[tech] || '#666666'}">
+							<span 
+								class="tech-tag" 
+								style="--tech-color: {getTechColor(tech)}"
+								role="listitem"
+							>
 								{tech}
 							</span>
 						{/each}
 					</div>
-					<a href={project.link} target="_blank" rel="noopener noreferrer">
-						{$language === 'no' ? 'Les Mer' : 'Read More'} →
+					<a 
+						href={project.link} 
+						target="_blank" 
+						rel="noopener noreferrer"
+						class="project-link"
+						aria-label={$language === 'no' ? `Les mer om ${project.title[$language]} (åpnes i ny fane)` : `Read more about ${project.title[$language]} (opens in new tab)`}
+					>
+						{$language === 'no' ? 'Les Mer' : 'Read More'} 
+						<span aria-hidden="true">→</span>
 					</a>
 				</div>
 			</div>
 		{/each}
 	</div>
 	<div class="view-all">
-		<a href="/projects" class="view-all-button">
+		<a 
+			href="/projects" 
+			class="view-all-button"
+			role="button"
+			aria-label={$language === 'no' ? 'Se alle prosjekter' : 'View all projects'}
+		>
 			<span>{$language === 'no' ? 'Se alle prosjekter' : 'View all projects'}</span>
-			<span class="arrow">→</span>
+			<span class="arrow" aria-hidden="true">→</span>
 		</a>
 	</div>
 </section>
@@ -153,9 +199,9 @@
 	<button 
 		class="scroll-top-button" 
 		on:click={scrollToTop}
-		aria-label="Tilbake til toppen"
+		aria-label={$language === 'no' ? 'Tilbake til toppen' : 'Back to top'}
 	>
-		↑
+		<span aria-hidden="true">↑</span>
 	</button>
 {/if}
 
@@ -647,5 +693,24 @@
 			height: 2.5rem;
 			font-size: 1.2rem;
 		}
+	}
+
+	/* Add focus styles for better keyboard navigation */
+	:global(*:focus-visible) {
+		outline: 3px solid var(--accent-primary);
+		outline-offset: 2px;
+		border-radius: 4px;
+	}
+
+	/* Ensure sufficient color contrast */
+	.tech-tag {
+		color: var(--text-primary);
+		background-color: var(--bg-secondary);
+	}
+
+	/* Improve link underlines for better visibility */
+	.project-link {
+		text-decoration-thickness: 2px;
+		text-underline-offset: 2px;
 	}
 </style>
