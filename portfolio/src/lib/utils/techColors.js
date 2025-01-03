@@ -10,6 +10,7 @@ export const techColors = {
 	Git: "#F44D27",
 	XD: "#FF61F6",
 	MariaDB: "#e38c00",
+	Svelte: "#ff3e00",
 	Flask: "#000000",
 	React: "#61dafb",
 	Figma: "#8C56FF",
