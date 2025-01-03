@@ -73,6 +73,18 @@
 		return tech in techColors ? techColors[tech as keyof typeof techColors] : '#666666';
 	}
 
+	const fallbackImage = '/images/placeholder.jpg';
+	
+	function handleImageError(event: Event) {
+		const img = event.target as HTMLImageElement;
+		img.src = fallbackImage;
+	}
+
+	function handleImageLoad(event: Event) {
+		const img = event.target as HTMLImageElement;
+		img.classList.add('loaded');
+	}
+
 	onMount(() => {
 		handleScroll();
 		window.addEventListener('scroll', handleScroll);
@@ -148,7 +160,14 @@
 				aria-label={project.title[$language]}
 			>
 				<div class="project-image">
-					<img src={project.image} alt={project.title[$language]} loading="lazy" />
+					<div class="image-skeleton"></div>
+					<img 
+						src={project.image} 
+						alt={project.title[$language]} 
+						loading="lazy"
+						on:error={handleImageError}
+						on:load={handleImageLoad}
+					/>
 				</div>
 				<div class="project-content">
 					<h3 tabindex="0">{project.title[$language]}</h3>
@@ -523,13 +542,45 @@
 		height: 200px;
 		overflow: hidden;
 		border-radius: 18px 18px 0 0;
+		position: relative;
+		background: var(--bg-secondary);
+	}
+
+	.image-skeleton {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			90deg,
+			var(--bg-secondary) 0%,
+			var(--nav-bg) 50%,
+			var(--bg-secondary) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 1.5s infinite;
 	}
 
 	.project-image img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		transition: transform 0.3s ease;
+		transition: transform 0.3s ease, opacity 0.3s ease;
+		opacity: 0;
+	}
+
+	.project-image img.loaded {
+		opacity: 1;
+	}
+
+	@keyframes shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
 	}
 
 	.project-card:hover .project-image img {
