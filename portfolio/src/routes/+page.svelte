@@ -498,16 +498,4 @@ aria-label={$language === 'no' ? 'Tilbake til toppen' : 'Back to top'}
         outline-offset: 2px;
         border-radius: 4px;
     }
-
-    /* Ensure sufficient color contrast */
-    .tech-tag {
-        color: var(--text-primary);
-        background-color: var(--bg-secondary);
-    }
-
-    /* Improve link underlines for better visibility */
-    .project-link {
-        text-decoration-thickness: 2px;
-        text-underline-offset: 2px;
-    }
 </style>
