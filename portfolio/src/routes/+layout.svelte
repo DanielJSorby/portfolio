@@ -154,7 +154,15 @@
 				</div>
 			</button>
 		</div>
-		<div class="mobile-menu-overlay" class:open={isMobileMenuOpen} on:click={closeMobileMenu}></div>
+		<button 
+			class="mobile-menu-overlay" 
+			class:open={isMobileMenuOpen} 
+			on:click={closeMobileMenu}
+			on:keydown={(e) => e.key === 'Escape' && closeMobileMenu()}
+			aria-label={$language === 'no' ? 'Lukk meny' : 'Close menu'}
+			role="button"
+			tabindex="0"
+		></button>
 		<div class="mobile-menu" class:open={isMobileMenuOpen}>
 			<div class="mobile-menu-wrapper">
 				<div class="mobile-menu-links">
@@ -437,6 +445,9 @@
 		opacity: 0;
 		transition: opacity 0.3s ease;
 		z-index: 999;
+		border: none;
+		cursor: pointer;
+		padding: 0;
 	}
 
 	@media (max-width: 768px) {
