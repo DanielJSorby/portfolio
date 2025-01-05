@@ -10,16 +10,11 @@
 		link: string;
 	};
 
-	const fallbackImage = 'https://picsum.photos/seed/placeholder/800/400';
+	const fallbackImage = 'https://picsum.photos/id/1/800/400';
 	
 	function handleImageError(event: Event) {
 		const img = event.target as HTMLImageElement;
 		img.src = fallbackImage;
-	}
-
-	function handleImageLoad(event: Event) {
-		const img = event.target as HTMLImageElement;
-		img.classList.add('loaded');
 	}
 
 	function getTechColor(tech: string): string {
@@ -33,13 +28,11 @@
 	aria-label={project.title[$language]}
 >
 	<div class="project-image">
-		<div class="image-skeleton"></div>
 		<img 
 			src={project.image} 
 			alt={project.title[$language]} 
 			loading="lazy"
 			on:error={handleImageError}
-			on:load={handleImageLoad}
 		/>
 	</div>
 	<div class="project-content">
@@ -100,41 +93,11 @@
 		background: var(--bg-secondary);
 	}
 
-	.image-skeleton {
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background: linear-gradient(
-			90deg,
-			var(--bg-secondary) 0%,
-			var(--nav-bg) 50%,
-			var(--bg-secondary) 100%
-		);
-		background-size: 200% 100%;
-		animation: shimmer 1.5s infinite;
-	}
-
 	.project-image img {
 		width: 100%;
 		height: 100%;
 		object-fit: cover;
-		transition: transform 0.3s ease, opacity 0.3s ease;
-		opacity: 0;
-	}
-
-	.project-image img.loaded {
-		opacity: 1;
-	}
-
-	@keyframes shimmer {
-		0% {
-			background-position: 200% 0;
-		}
-		100% {
-			background-position: -200% 0;
-		}
+		transition: transform 0.3s ease;
 	}
 
 	.project-card:hover .project-image img {

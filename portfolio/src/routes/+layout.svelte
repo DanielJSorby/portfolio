@@ -51,7 +51,6 @@
 		};
 
 		window.addEventListener('scroll', handleScroll, { passive: true });
-		document.body.style.overflow = 'hidden';
 
 		// Simulate minimum loading time and wait for images
 		await Promise.all([
@@ -60,7 +59,7 @@
 		]);
 
 		isLoading = false;
-		document.body.style.overflow = '';
+		document.body.style.overflow = 'auto';
 		
 		// Start hero animation after loading screen fades out
 		setTimeout(() => {
@@ -69,6 +68,7 @@
 
 		return () => {
 			window.removeEventListener('scroll', handleScroll);
+			document.body.style.overflow = 'auto'; // Ensure overflow is restored on unmount
 		};
 	});
 
