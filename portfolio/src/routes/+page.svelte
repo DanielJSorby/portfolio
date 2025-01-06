@@ -343,7 +343,6 @@ aria-label={$language === 'no' ? 'Tilbake til toppen' : 'Back to top'}
     .skill-box:hover {
         transform: translateY(-6px);
         color: white;
-        border-left-color: transparent;
         box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
