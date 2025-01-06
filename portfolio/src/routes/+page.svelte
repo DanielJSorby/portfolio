@@ -129,7 +129,7 @@ aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
         on:click={() => handleSkillClick(skill)}
         on:keydown={(e) => e.key === 'Enter' && handleSkillClick(skill)}
         role="button"
-        tabindex="0"
+        tabindex="1"
         aria-label={$language === 'no' ? `Klikk for å se ${skill.name} prosjekter` : `Click to see ${skill.name} projects`}
         >
         {skill.name}
