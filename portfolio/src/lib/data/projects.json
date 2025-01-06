@@ -19,7 +19,7 @@
 				"Markdown",
 				"JavaScript"
 			],
-			"image": "https://picsum.photos/800/400?random=1",
+			"image": "https://i.ibb.co/p1czy7q/Skjermbilde-2025-01-06-kl-18-47-33.png",
 			"link": "https://github.com/DanielJSorby/DASI"
 		},
 		{
@@ -32,7 +32,7 @@
 				"en": "A car website for buying cars. Made as a school project."
 			},
 			"technologies": ["HTML", "CSS", "JavaScript"],
-			"image": "https://picsum.photos/800/400?random=2",
+			"image": "https://i.ibb.co/ZS6q8Kt/Skjermbilde-2025-01-06-kl-19-04-05.png",
 			"link": "https://github.com/DanielJSorby/DanielOgSimen"
 		},
 		{
@@ -45,7 +45,7 @@
 				"en": "A website where you can see information about movies."
 			},
 			"technologies": ["HTML", "CSS", "JavaScript", "Json"],
-			"image": "https://picsum.photos/800/400?random=3",
+			"image": "https://i.ibb.co/s1dyrMY/Skjermbilde-2025-01-06-kl-19-05-54.png",
 			"link": "https://github.com/DanielJSorby/imdb"
 		},
 		{
@@ -58,7 +58,7 @@
 				"en": "The website for the energy drink flow. Created as a business project at school"
 			},
 			"technologies": ["Svelte Kit", "Json", "JavaScript", "CSS", "HTML"],
-			"image": "https://picsum.photos/800/400?random=4",
+			"image": "https://i.ibb.co/N2XTHxJ/Skjermbilde-2025-01-06-kl-19-08-13.png",
 			"link": "https://github.com/DanielJSorby/flow-svelte"
 		},
 		{
@@ -71,7 +71,7 @@
 				"en": "A project to learn Flask, featuring a simple login form that validates against a user JSON file."
 			},
 			"technologies": ["Flask", "Python", "Json", "JavaScript", "HTML"],
-			"image": "https://picsum.photos/800/400?random=5",
+			"image": "https://i.ibb.co/jWdFzMH/Skjermbilde-2025-01-06-kl-19-10-32.png",
 			"link": "https://github.com/DanielJSorby/flask"
 		},
 		{
@@ -84,7 +84,7 @@
 				"en": "The project I used to learn React"
 			},
 			"technologies": ["React", "TypeScript", "CSS", "HTML"],
-			"image": "https://picsum.photos/800/400?random=6",
+			"image": "https://i.ibb.co/x6nPqpB/Skjermbilde-2025-01-06-kl-19-13-18.png",
 			"link": "https://github.com/DanielJSorby/Learn-React"
 		},
 		{
@@ -97,7 +97,7 @@
 				"en": "The Readme file to my Github Profile"
 			},
 			"technologies": ["Markdown"],
-			"image": "https://picsum.photos/800/400?random=7",
+			"image": "https://i.ibb.co/BsM3YGJ/Skjermbilde-2025-01-06-kl-19-15-13.png",
 			"link": "https://github.com/DanielJSorby/DanielJSorby"
 		},
 		{
@@ -117,7 +117,7 @@
 				"JavaScript",
 				"Git"
 			],
-			"image": "https://picsum.photos/800/400?random=8",
+			"image": "https://i.ibb.co/xMPfv1t/Skjermbilde-2025-01-06-kl-19-17-28.png",
 			"link": "https://github.com/baldurht/infoBakka/tree/main"
 		},
 		{
@@ -137,7 +137,7 @@
 				"JavaScript",
 				"TypeScript"
 			],
-			"image": "https://picsum.photos/800/400?random=9",
+			"image": "https://i.ibb.co/9h1Z63N/Skjermbilde-2025-01-06-kl-19-18-57.png",
 			"link": "https://github.com/DanielJSorby/portfolio"
 		},
 		{
@@ -150,7 +150,7 @@
 				"en": "A website for a Viking clan, created in Denmark as a school project."
 			},
 			"technologies": ["Svelte Kit", "Json", "HTML", "CSS", "JavaScript"],
-			"image": "https://picsum.photos/800/400?random=10",
+			"image": "https://i.ibb.co/C1QKpv8/Skjermbilde-2025-01-06-kl-19-21-03.png",
 			"link": "https://github.com/DanielJSorby/Dannmark"
 		}
 	]

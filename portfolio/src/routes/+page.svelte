@@ -12,30 +12,39 @@
 
 	const featuredProjects = [
 		{
-			title: {
-				no: 'Dasi GPT',
-				en: 'Dasi GPT'
+			"title": {
+				"no": "Dasi GPT",
+				"en": "Dasi GPT"
 			},
-			description: {
-				no: 'En ai chatbot som hjelper deg med alt du trenger!',
-				en: 'An ai chatbot that helps you with everything you need!'
+			"description": {
+				"no": "En ai chatbot som hjelper deg med alt du trenger!",
+				"en": "An ai chatbot that helps you with everything you need!"
 			},
-			technologies: ['Svelte Kit', 'TypeScript', 'OpenAI', 'MySQL', 'Linux', 'Git', 'Markdown', 'Javascript'],
-			image: 'https://picsum.photos/id/237/800/400',
-			link: 'https://github.com/DanielJSorby/DASI'
+			"technologies": [
+				"Svelte Kit",
+				"TypeScript",
+				"OpenAI",
+				"MySQL",
+				"Linux",
+				"Git",
+				"Markdown",
+				"JavaScript"
+			],
+			"image": "https://i.ibb.co/p1czy7q/Skjermbilde-2025-01-06-kl-18-47-33.png",
+			"link": "https://github.com/DanielJSorby/DASI"
 		},
 		{
-			title: {
-				no: 'Prime Wheels',
-					en: 'Prime Wheels'
+			"title": {
+				"no": "Prime Wheels",
+				"en": "Prime Wheels"
 			},
-			description: {
-				no: 'Et bilnettsted for å kjøpe biler. Laget som en skoleprosjekt.',
-				en: 'A car website for buying cars. Made as a school project.'
+			"description": {
+				"no": "Et bilnettsted for å kjøpe biler. Laget som en skoleprosjekt.",
+				"en": "A car website for buying cars. Made as a school project."
 			},
-			technologies: ['HTML', 'CSS', 'JavaScript'],
-			image: 'https://picsum.photos/id/111/800/400',
-			link: 'https://github.com/DanielJSorby/DanielOgSimen'
+			"technologies": ["HTML", "CSS", "JavaScript"],
+			"image": "https://i.ibb.co/ZS6q8Kt/Skjermbilde-2025-01-06-kl-19-04-05.png",
+			"link": "https://github.com/DanielJSorby/DanielOgSimen"
 		}
 	];
 
