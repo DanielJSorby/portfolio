@@ -31,7 +31,7 @@
 				"JavaScript"
 			],
 			"image": "https://i.ibb.co/p1czy7q/Skjermbilde-2025-01-06-kl-18-47-33.png",
-			"link": "https://github.com/DanielJSorby/DASI"
+			"link": "https://github.com/DanielOgSimen/DASI"
 		},
 		{
 			"title": {
@@ -44,7 +44,7 @@
 			},
 			"technologies": ["HTML", "CSS", "JavaScript"],
 			"image": "https://i.ibb.co/ZS6q8Kt/Skjermbilde-2025-01-06-kl-19-04-05.png",
-			"link": "https://github.com/DanielJSorby/DanielOgSimen"
+			"link": "https://github.com/DanielOgSimen/Prime-Wheels"
 		}
 	];
 
