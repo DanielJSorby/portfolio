@@ -32,7 +32,7 @@
 						</a>
 					</li>
 					<li>
-						<a href="https://www.linkedin.com/in/daniel-johan-s%C3%B8rby-4a3aab2ab/" target="_blank" rel="noopener noreferrer">
+						<a href="www.linkedin.com/in/danieljsorby" target="_blank" rel="noopener noreferrer">
 							<span class="icon">💼</span> LinkedIn
 						</a>
 					</li>
