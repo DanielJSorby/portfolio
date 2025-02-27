@@ -6,7 +6,7 @@ sleep 1
 # Åpne Terminal (Mac)
 osascript -e 'tell application "Terminal" to activate'
 
-# Kjør curl parrot.live i 10 faner
+# Kjør curl parrot.live i 100 faner
 for i in {1..100}; do
   osascript -e 'tell application "Terminal" to do script "curl parrot.live"'
   sleep 0.5
