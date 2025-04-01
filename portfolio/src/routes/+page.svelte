@@ -24,8 +24,7 @@
 				"Svelte Kit",
 				"TypeScript",
 				"OpenAI",
-				"MySQL",
-				"Linux",
+				"FireBase",
 				"Git",
 				"Markdown",
 				"JavaScript"

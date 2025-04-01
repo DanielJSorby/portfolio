@@ -16,4 +16,5 @@ export const techColors = {
 	Figma: "#8C56FF",
 	OpenAI: "#412991",
 	Markdown: "#083fa1",
+	FireBase: "#ffca28",
 };

@@ -5,7 +5,7 @@
 	$: t = translations[$language];
 
 	let imageLoaded = false;
-	const profileImage = "https://github.com/DanielJSorby/portfolio/blob/main/portfolio/src/images/Splash%20daniel%20foran%20slottet.png?raw=true";
+	const profileImage = "/images/Splash%20daniel%20foran%20slottet.png";
 
 	onMount(() => {
 		const img = new Image();
@@ -54,6 +54,15 @@
 				{$language === 'no'
 					? 'Jobber med diverse prosjekter, med fokus på webutvikling og design. Bruker moderne teknologier som React og Svelte.'
 					: 'Working on various projects, focusing on web development and design. Using modern technologies like React, and Svelte.'}
+			</p>
+		</div>
+		<div class="experience-item">
+			<h4>{$language === 'no' ? 'Utvikler for KissMyArt.no' : 'Developer for KissMyArt.no'}</h4>
+			<p class="date">2025</p>
+			<p>
+				{$language === 'no'
+					? 'Utvikler av klesbutikken KissMyArt.no. Jobber med å lage en moderne og responsiv nettbutikk. Bruker for eksempel Wordpress og WooComerence'
+					: 'Developer for the clothing store KissMyArt.no. Working on creating a modern and responsive online store. Using technologies like Wordpress and WooCommerce.'}
 			</p>
 		</div>
         <div class="experience-item">
