@@ -2,6 +2,26 @@
 	"projects": [
 		{
 			"title": {
+				"no": "Jobtrackr",
+				"en": "Jobtrackr"
+			},
+			"description": {
+				"no": "En app som hjelper deg med å holde styr på jobbintervjuer",
+				"en": "An app that helps you keep track of job interviews"
+			},
+			"technologies": [
+				"Svelte Kit",
+				"TypeScript",
+				"MariaDB",
+				"Git",
+				"Markdown",
+				"JavaScript"
+			],
+			"image": "/images/projects/jobtrackr.png",
+			"link": "https://github.com/DanielJSorby/jobtrackr"
+		},
+		{
+			"title": {
 				"no": "Dasi GPT",
 				"en": "Dasi GPT"
 			},

@@ -8,7 +8,15 @@
 	
 	$: t = translations[$language];
 
-	const skills = Object.entries(techColors).map(([name, color]) => ({ name, color }));
+	interface Skill {
+		name: string;
+		color: string;
+	}
+
+	const skills: Skill[] = Object.entries(techColors).map(([name, color]) => ({ 
+		name, 
+		color: color as string 
+	}));
 
 	const featuredProjects = [
 		{
@@ -34,16 +42,23 @@
 		},
 		{
 			"title": {
-				"no": "Prime Wheels",
-				"en": "Prime Wheels"
+				"no": "Jobtrackr",
+				"en": "Jobtrackr"
 			},
 			"description": {
-				"no": "Et bilnettsted for å kjøpe biler. Laget som en skoleprosjekt.",
-				"en": "A car website for buying cars. Made as a school project."
+				"no": "En app som hjelper deg med å holde styr på jobbintervjuer",
+				"en": "An app that helps you keep track of job interviews"
 			},
-			"technologies": ["HTML", "CSS", "JavaScript"],
-			"image": "https://i.ibb.co/ZS6q8Kt/Skjermbilde-2025-01-06-kl-19-04-05.png",
-			"link": "https://github.com/DanielOgSimen/Prime-Wheels"
+			"technologies": [
+				"Svelte Kit",
+				"TypeScript",
+				"MariaDB",
+				"Git",
+				"Markdown",
+				"JavaScript"
+			],
+			"image": "/images/projects/jobtrackr.png",
+			"link": "https://github.com/DanielJSorby/jobtrackr"
 		}
 	];
 
@@ -67,11 +82,6 @@
 			}
 		});
 		showScrollTop = window.scrollY > 500;
-	}
-
-	interface Skill {
-		name: string;
-		color: string;
 	}
 
 	function handleSkillClick(skill: Skill) {

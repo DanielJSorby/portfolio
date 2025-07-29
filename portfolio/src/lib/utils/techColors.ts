@@ -1,4 +1,4 @@
-export const techColors = {
+export const techColors: Record<string, string> = {
 	JavaScript: "#f1e05a",
 	TypeScript: "#3178c6",
 	Linux: "#89e051",
