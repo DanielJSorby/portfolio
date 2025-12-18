@@ -10,17 +10,21 @@ export const load: PageLoad = async () => {
         throw redirect(303, '/login');
     }
 
-    const { data: projects, error } = await supabase
+    // Load top 4 projects for quick management
+    const { data: topProjects } = await supabase
         .from('projects')
         .select('*')
-        .order('placement', { ascending: true });
+        .order('placement', { ascending: true })
+        .limit(4);
 
-    if (error) {
-        console.error('Error fetching projects:', error);
-    }
+    // Load technologies for quick color adding
+    const { data: technologies } = await supabase
+        .from('technologies')
+        .select('*')
+        .order('name');
 
     return {
-        projects: (projects as unknown as Project[]) ?? []
+        topProjects: (topProjects as unknown as Project[]) ?? [],
+        technologies: technologies ?? []
     };
 };
-

@@ -1,335 +1,320 @@
 <script lang="ts">
     import { supabase } from '$lib/supabaseClient';
     import { language } from '$lib/stores/language';
-    import type { Project } from '$lib/types/project';
     import type { PageData } from './$types';
     import { invalidateAll } from '$app/navigation';
-    import { onMount } from 'svelte';
 
     export let data: PageData;
-    let localProjects: Project[] = [];
-    let isUpdating = false;
-
-    // Update local list when data changes, but only if we're not busy
-    $: if (data.projects && !isUpdating) {
-        localProjects = data.projects;
-    }
-
-    onMount(() => {
-        const channel = supabase
-            .channel('projects-db-changes')
-            .on(
-                'postgres_changes',
-                {
-                    event: '*',
-                    schema: 'public',
-                    table: 'projects'
-                },
-                () => {
-                    if (!isUpdating) {
-                        invalidateAll();
-                    }
-                }
-            )
-            .subscribe();
-
-        return () => {
-            supabase.removeChannel(channel);
-        };
-    });
-
-    async function toggleFeatured(project: Project) {
-        const { error } = await supabase
-            .from('projects')
-            .update({ featured: !project.featured })
-            .eq('id', project.id);
-        
-        if (!error) invalidateAll();
-    }
-
-    async function reorderProjects(newOrderIds: (number | undefined)[]) {
-        isUpdating = true;
-        try {
-            // 1. Move everything to a high temporary range
-            for (let i = 0; i < newOrderIds.length; i++) {
-                await supabase
-                    .from('projects')
-                    .update({ placement: 10000 + i })
-                    .eq('id', newOrderIds[i]);
-            }
-
-            // 2. Move everything to their final positions (0, 1, 2...)
-            for (let i = 0; i < newOrderIds.length; i++) {
-                await supabase
-                    .from('projects')
-                    .update({ placement: i })
-                    .eq('id', newOrderIds[i]);
-            }
-
-            await invalidateAll();
-        } catch (error: any) {
-            console.error('Reorder failed:', error);
-            alert('Kunne ikke endre rekkefølge: ' + error.message);
-        } finally {
-            isUpdating = false;
-        }
-    }
-
-    async function moveProject(project: Project, direction: 'up' | 'down') {
-        const currentIndex = localProjects.findIndex(p => p.id === project.id);
-        const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
-
-        if (targetIndex < 0 || targetIndex >= localProjects.length) return;
-
-        // Instant local update
-        const newProjects = [...localProjects];
-        const [moved] = newProjects.splice(currentIndex, 1);
-        newProjects.splice(targetIndex, 0, moved);
-        localProjects = newProjects;
-
-        await reorderProjects(localProjects.map(p => p.id));
-    }
-
-    async function deleteProject(id: number) {
-        if (!confirm('Er du sikker på at du vil slette dette prosjektet?')) return;
-
-        const { error } = await supabase
-            .from('projects')
-            .delete()
-            .eq('id', id);
-        
-        if (!error) invalidateAll();
-    }
-
-    let draggedItemIndex: number | null = null;
-
-    function handleDragStart(index: number) {
-        draggedItemIndex = index;
-    }
-
-    async function handleDragOver(e: DragEvent, index: number) {
-        e.preventDefault();
-        if (draggedItemIndex === null || draggedItemIndex === index) return;
-    }
-
-    async function handleDrop(targetIndex: number) {
-        if (draggedItemIndex === null || draggedItemIndex === targetIndex) {
-            draggedItemIndex = null;
-            return;
-        }
-
-        // Instant local update
-        const newProjects = [...localProjects];
-        const [movedProject] = newProjects.splice(draggedItemIndex, 1);
-        newProjects.splice(targetIndex, 0, movedProject);
-        localProjects = newProjects;
-
-        const newOrderIds = localProjects.map(p => p.id);
-        draggedItemIndex = null;
-        
-        await reorderProjects(newOrderIds);
-    }
+    
+    let newTechName = '';
+    let newTechColor = '#666666';
+    let isGenerating = false;
 
     async function handleLogout() {
         await supabase.auth.signOut();
         window.location.href = '/login';
     }
+
+    async function quickAddTech() {
+        if (!newTechName) return;
+        const { error } = await supabase
+            .from('technologies')
+            .insert({ name: newTechName, color: newTechColor });
+
+        if (!error) {
+            newTechName = '';
+            newTechColor = '#666666';
+            invalidateAll();
+        } else {
+            alert('Feil ved lagring: ' + error.message);
+        }
+    }
+
+    async function handleGenerateColor() {
+        if (!newTechName) return;
+        isGenerating = true;
+        try {
+            const response = await fetch('/api/generate-color', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ techName: newTechName })
+            });
+            const resData = await response.json();
+            if (resData.color) newTechColor = resData.color;
+        } finally {
+            isGenerating = false;
+        }
+    }
 </script>
 
 <div class="admin-dashboard">
     <header>
-        <h1>Prosjekt Administrasjon</h1>
-        <div class="actions">
-            <a href="/admin/tech" class="btn secondary">Administrer Teknologier</a>
-            <a href="/admin/new" class="btn primary">Nytt Prosjekt</a>
-            <button on:click={handleLogout} class="btn secondary">Logg ut</button>
-        </div>
+        <h1>Admin Dashboard</h1>
+        <button on:click={handleLogout} class="btn danger">Logg ut</button>
     </header>
 
-    <div class="project-list">
-        {#each localProjects as project, i (project.id)}
-            <div 
-                class="project-item"
-                draggable="true"
-                role="listitem"
-                on:dragstart={() => handleDragStart(i)}
-                on:dragover={(e) => handleDragOver(e, i)}
-                on:drop={() => handleDrop(i)}
-                class:dragging={draggedItemIndex === i}
-            >
-                <div class="project-info">
-                    <span class="drag-handle" title="Dra for å endre rekkefølge">⋮⋮</span>
-                    <img src={project.image} alt="" class="thumbnail" />
-                    <div class="details">
-                        <h3>{project.title[$language]}</h3>
-                        <div class="tags">
-                            {#if project.featured}
-                                <span class="badge featured">Featured</span>
-                            {/if}
-                            {#each project.technologies as tech}
-                                <span class="tech-tag">{tech}</span>
-                            {/each}
+    <div class="dashboard-grid">
+        <!-- Quick Settings Section -->
+        <section class="quick-settings">
+            <h2>Hurtiginnstillinger</h2>
+            <div class="quick-actions-grid">
+                <div class="card">
+                    <h3>Hurtiglegg til teknologi</h3>
+                    <div class="quick-form">
+                        <input type="text" bind:value={newTechName} placeholder="Navn (f.eks. Svelte)" />
+                        <div class="color-row">
+                            <input type="color" bind:value={newTechColor} />
+                            <button class="btn secondary small" on:click={handleGenerateColor} disabled={isGenerating}>
+                                {isGenerating ? '...' : '✨ AI'}
+                            </button>
                         </div>
+                        <button class="btn primary small" on:click={quickAddTech}>Legg til</button>
                     </div>
                 </div>
 
-                <div class="controls">
-                    <button 
-                        class="icon-btn" 
-                        disabled={i === 0} 
-                        on:click={() => moveProject(project, 'up')}
-                        title="Flytt opp"
-                    >↑</button>
-                    <button 
-                        class="icon-btn" 
-                        disabled={i === localProjects.length - 1} 
-                        on:click={() => moveProject(project, 'down')}
-                        title="Flytt ned"
-                    >↓</button>
-                    <button 
-                        class="btn small" 
-                        on:click={() => toggleFeatured(project)}
-                    >
-                        {project.featured ? 'Fjern Featured' : 'Gjør Featured'}
-                    </button>
-                    <a href="/admin/edit/{project.id}" class="btn small">Rediger</a>
-                    <button 
-                        class="btn small danger" 
-                        on:click={() => project.id && deleteProject(project.id)}
-                    >Slett</button>
+                <div class="card">
+                    <h3>Navigasjon</h3>
+                    <div class="nav-links">
+                        <a href="/admin/projects" class="btn secondary">
+                            📋 Alle Prosjekter
+                        </a>
+                        <a href="/admin/new" class="btn primary">
+                            ➕ Nytt Prosjekt
+                        </a>
+                        <a href="/admin/tech" class="btn secondary">
+                            🎨 Alle Teknologier
+                        </a>
+                    </div>
                 </div>
             </div>
-        {/each}
+        </section>
+
+        <!-- Top Projects Management -->
+        <section class="top-projects">
+            <div class="section-header">
+                <h2>Topp 4 Prosjekter</h2>
+                <a href="/admin/projects" class="view-all">Se alle →</a>
+            </div>
+            
+            <div class="mini-project-list">
+                {#each data.topProjects as project}
+                    <div class="mini-card">
+                        <img src={project.image} alt="" />
+                        <div class="info">
+                            <h4>{project.title[$language]}</h4>
+                            <div class="actions">
+                                <a href="/admin/edit/{project.id}" class="icon-link">✏️</a>
+                                <span class="placement">Plass: {(project.placement ?? 0) + 1}</span>
+                            </div>
+                        </div>
+                    </div>
+                {/each}
+                {#if data.topProjects.length === 0}
+                    <p class="empty">Ingen prosjekter ennå.</p>
+                {/if}
+            </div>
+        </section>
     </div>
 </div>
 
 <style>
     .admin-dashboard {
-        max-width: 1000px;
+        max-width: 1200px;
         margin: 2rem auto;
-        padding: 0 1rem;
+        padding: 0 1.5rem;
     }
 
     header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-bottom: 2rem;
-    }
-
-    .actions {
-        display: flex;
+        margin-bottom: 3rem;
         gap: 1rem;
     }
 
-    .project-list {
+    @media (max-width: 600px) {
+        header {
+            flex-direction: column;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 2rem;
+        }
+    }
+
+    h1 {
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        margin: 0;
+    }
+
+    .dashboard-grid {
+        display: grid;
+        grid-template-columns: 1fr 1.5fr;
+        gap: 3rem;
+    }
+
+    .quick-actions-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    @media (max-width: 1024px) {
+        .dashboard-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1024px) {
+        .quick-actions-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    h2 {
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        color: var(--text-primary);
+    }
+
+    .card {
+        background: var(--bg-secondary);
+        padding: 1.5rem;
+        border-radius: 20px;
+        border: 1px solid var(--nav-bg);
+        box-shadow: var(--card-shadow);
+        margin-bottom: 1.5rem;
+    }
+
+    h3 {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+        color: var(--text-secondary);
+    }
+
+    .quick-form {
         display: flex;
         flex-direction: column;
         gap: 1rem;
     }
 
-    .project-item {
-        background: var(--bg-secondary);
-        padding: 1rem;
-        border-radius: 12px;
+    .color-row {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+    }
+
+    input[type="text"] {
+        padding: 0.75rem;
+        border-radius: 10px;
+        border: 1px solid var(--nav-bg);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+    }
+
+    .nav-links {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+
+    .section-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        box-shadow: var(--card-shadow);
-        cursor: grab;
-        transition: transform 0.2s, background-color 0.2s;
+        margin-bottom: 1.5rem;
     }
 
-    .project-item:active {
-        cursor: grabbing;
+    .view-all {
+        color: var(--accent-primary);
+        text-decoration: none;
+        font-weight: 600;
     }
 
-    .project-item.dragging {
-        opacity: 0.5;
-        background: var(--bg-primary);
-        transform: scale(0.98);
-    }
-
-    .drag-handle {
-        color: var(--text-secondary);
-        cursor: grab;
-        font-size: 1.2rem;
-        padding: 0 0.5rem;
-        user-select: none;
-    }
-
-    .project-info {
-        display: flex;
-        align-items: center;
+    .mini-project-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
         gap: 1.5rem;
     }
 
-    .thumbnail {
-        width: 60px;
-        height: 60px;
+    .mini-card {
+        background: var(--bg-secondary);
+        border-radius: 15px;
+        overflow: hidden;
+        border: 1px solid var(--nav-bg);
+        transition: transform 0.3s;
+    }
+
+    .mini-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .mini-card img {
+        width: 100%;
+        height: 120px;
         object-fit: cover;
-        border-radius: 8px;
     }
 
-    .details h3 {
+    .mini-card .info {
+        padding: 1rem;
+    }
+
+    .mini-card h4 {
         margin: 0 0 0.5rem 0;
-        font-size: 1.1rem;
+        font-size: 1rem;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 
-    .tags {
+    .mini-card .actions {
         display: flex;
-        flex-wrap: wrap;
-        gap: 0.5rem;
-    }
-
-    .tech-tag {
-        font-size: 0.75rem;
-        background: var(--bg-primary);
-        padding: 0.2rem 0.5rem;
-        border-radius: 4px;
-    }
-
-    .badge.featured {
-        background: var(--accent-primary);
-        color: white;
-        font-size: 0.75rem;
-        padding: 0.2rem 0.5rem;
-        border-radius: 4px;
-        font-weight: bold;
-    }
-
-    .controls {
-        display: flex;
-        gap: 0.5rem;
+        justify-content: space-between;
         align-items: center;
+        font-size: 0.8rem;
+    }
+
+    .icon-link {
+        text-decoration: none;
+        background: var(--bg-primary);
+        padding: 0.3rem 0.5rem;
+        border-radius: 5px;
+    }
+
+    .placement {
+        color: var(--text-secondary);
     }
 
     .btn {
-        padding: 0.5rem 1rem;
-        border-radius: 8px;
+        padding: 0.75rem 1.25rem;
+        border-radius: 50px;
         border: none;
         font-weight: 600;
         cursor: pointer;
         text-decoration: none;
         font-size: 0.9rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
     }
 
     .btn.primary { background: var(--accent-primary); color: white; }
-    .btn.secondary { background: var(--bg-primary); color: var(--text-primary); }
-    .btn.danger { background: #fee2e2; color: #dc2626; }
-    .btn.small { padding: 0.3rem 0.6rem; font-size: 0.8rem; }
+    .btn.secondary { background: var(--bg-primary); color: var(--text-primary); border: 1px solid var(--nav-bg); }
+    .btn.danger { background: rgba(220, 38, 38, 0.1); color: #dc2626; }
+    .btn.small { padding: 0.5rem 1rem; font-size: 0.8rem; }
 
-    .icon-btn {
-        background: none;
-        border: 1px solid var(--nav-bg);
-        border-radius: 4px;
-        cursor: pointer;
-        padding: 2px 8px;
-        color: var(--text-primary);
-    }
-
-    .icon-btn:disabled {
-        opacity: 0.3;
-        cursor: not-allowed;
+    .empty {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 3rem;
     }
 </style>

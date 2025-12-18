@@ -77,57 +77,83 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        min-height: 60vh;
+        min-height: 80vh;
         padding: 2rem;
     }
 
     .login-form {
         background: var(--bg-secondary);
-        padding: 2.5rem;
-        border-radius: 20px;
+        padding: 3rem;
+        border-radius: 30px;
         box-shadow: var(--card-shadow);
         width: 100%;
-        max-width: 400px;
+        max-width: 450px;
+        border: 1px solid var(--nav-bg);
+        backdrop-filter: blur(10px);
     }
 
     h1 {
         text-align: center;
-        margin-bottom: 2rem;
-        color: var(--text-primary);
+        margin-bottom: 2.5rem;
+        font-size: 2.5rem;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
     }
 
     .form-group {
-        margin-bottom: 1.5rem;
+        margin-bottom: 2rem;
     }
 
     label {
         display: block;
-        margin-bottom: 0.5rem;
+        margin-bottom: 0.75rem;
         color: var(--text-secondary);
+        font-weight: 500;
+        font-size: 0.9rem;
     }
 
     input {
         width: 100%;
-        padding: 0.75rem 1rem;
-        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        border-radius: 15px;
         border: 1px solid var(--nav-bg);
         background: var(--bg-primary);
         color: var(--text-primary);
         font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    input:focus {
+        border-color: var(--accent-primary);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(var(--accent-primary-rgb), 0.1);
+        transform: translateY(-2px);
     }
 
     button {
         width: 100%;
-        padding: 0.75rem;
-        border-radius: 10px;
+        padding: 1rem;
+        border-radius: 50px;
         border: none;
         background: var(--accent-primary);
         color: white;
-        font-size: 1rem;
+        font-size: 1.1rem;
         font-weight: 600;
         cursor: pointer;
-        transition: opacity 0.2s;
+        transition: all 0.3s ease;
         margin-top: 1rem;
+        box-shadow: 0 4px 15px rgba(var(--accent-primary-rgb), 0.3);
+    }
+
+    button:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(var(--accent-primary-rgb), 0.4);
+    }
+
+    button:active:not(:disabled) {
+        transform: translateY(-1px);
     }
 
     button:disabled {
@@ -136,13 +162,14 @@
     }
 
     .error-message {
-        background: #fee2e2;
+        background: rgba(220, 38, 38, 0.1);
         color: #dc2626;
-        padding: 0.75rem;
-        border-radius: 10px;
-        margin-bottom: 1.5rem;
+        padding: 1rem;
+        border-radius: 15px;
+        margin-bottom: 2rem;
         text-align: center;
         font-size: 0.9rem;
+        border: 1px solid rgba(220, 38, 38, 0.2);
     }
 </style>
 

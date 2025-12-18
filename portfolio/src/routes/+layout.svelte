@@ -174,6 +174,9 @@
 					<a href="/projects" on:click={closeMobileMenu}>{t.nav.projects}</a>
 					<a href="/about" on:click={closeMobileMenu}>{t.nav.about}</a>
 					<a href="/contact" on:click={closeMobileMenu}>{t.nav.contact}</a>
+					{#if data.isLoggedIn}
+						<a href="/admin" on:click={closeMobileMenu} class="admin-link">Admin</a>
+					{/if}
 				</div>
 				<div class="mobile-menu-controls">
 					<ThemeToggle />

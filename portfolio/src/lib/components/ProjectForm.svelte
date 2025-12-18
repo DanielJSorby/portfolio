@@ -57,7 +57,7 @@
             loading = false;
         } else {
             await invalidateAll();
-            goto('/admin');
+            goto('/admin/projects');
         }
     }
 </script>
@@ -130,97 +130,116 @@
         <button type="submit" class="btn primary" disabled={loading}>
             {loading ? 'Lagrer...' : 'Lagre Prosjekt'}
         </button>
-        <a href="/admin" class="btn secondary">Avbryt</a>
+        <a href="/admin/projects" class="btn secondary">Avbryt</a>
     </div>
 </form>
 
 <style>
     .project-form {
         background: var(--bg-secondary);
-        padding: 2rem;
-        border-radius: 20px;
+        padding: 3rem;
+        border-radius: 30px;
         box-shadow: var(--card-shadow);
         display: flex;
         flex-direction: column;
-        gap: 1.5rem;
+        gap: 2rem;
+        border: 1px solid var(--nav-bg);
     }
 
     .grid {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        gap: 2rem;
+        gap: 2.5rem;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 900px) {
         .grid { grid-template-columns: 1fr; }
     }
 
     h2 {
-        font-size: 1.2rem;
-        margin-bottom: 1rem;
-        color: var(--accent-primary);
+        font-size: 1.5rem;
+        margin-bottom: 1.5rem;
+        background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        font-weight: 700;
     }
 
     .form-group {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: 0.75rem;
     }
 
     .label-text {
         display: block;
         font-weight: 600;
         color: var(--text-secondary);
-        font-size: 0.9rem;
-        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
     }
 
     .form-group.checkbox {
-        margin-top: 1.5rem;
+        margin-top: 1rem;
+        background: var(--bg-primary);
+        padding: 1rem 1.5rem;
+        border-radius: 15px;
+        border: 1px solid var(--nav-bg);
+        width: fit-content;
     }
 
     .form-group.checkbox label {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: 1rem;
         cursor: pointer;
     }
 
-    .form-group.checkbox .label-text {
-        margin-bottom: 0;
+    .form-group.checkbox input[type="checkbox"] {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
     }
 
     input[type="text"], textarea {
         width: 100%;
-        padding: 0.75rem;
-        border-radius: 10px;
+        padding: 1rem 1.25rem;
+        border-radius: 15px;
         border: 1px solid var(--nav-bg);
         background: var(--bg-primary);
         color: var(--text-primary);
         font-size: 1rem;
+        transition: all 0.3s ease;
+    }
+
+    input[type="text"]:focus, textarea:focus {
+        border-color: var(--accent-primary);
+        outline: none;
+        box-shadow: 0 0 0 4px rgba(var(--accent-primary-rgb), 0.1);
     }
 
     .tech-selection {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        padding: 1rem;
+        gap: 0.75rem;
+        padding: 1.5rem;
         background: var(--bg-primary);
-        border-radius: 12px;
+        border-radius: 20px;
         border: 1px solid var(--nav-bg);
     }
 
     .tech-tag {
-        background-color: var(--nav-bg);
-        color: var(--nav-text);
-        padding: 0.25rem 0.75rem;
-        border-radius: 16px;
-        font-size: 0.875rem;
-        transition: all 0.3s ease;
-        border: none;
-        border-left: 3px solid var(--tech-color);
+        background-color: var(--bg-secondary);
+        color: var(--text-secondary);
+        padding: 0.5rem 1.25rem;
+        border-radius: 50px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border: 2px solid transparent;
+        border-left: 4px solid var(--tech-color);
         cursor: pointer;
-        opacity: 0.6;
+        opacity: 0.7;
     }
 
     .tech-tag.active {
@@ -228,48 +247,96 @@
         color: white;
         opacity: 1;
         transform: translateY(-2px);
-        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        border-color: rgba(255, 255, 255, 0.2);
     }
 
-    .tech-tag:hover {
+    .tech-tag:hover:not(.active) {
         opacity: 1;
+        border-color: var(--tech-color);
+        background: var(--bg-primary);
     }
 
     .add-new-tech {
-        font-size: 0.8rem;
+        font-size: 0.9rem;
         color: var(--accent-primary);
         text-decoration: none;
-        display: flex;
+        display: inline-flex;
         align-items: center;
-        margin-left: 0.5rem;
+        margin-left: 1rem;
+        font-weight: 600;
+        transition: all 0.2s;
     }
 
     .add-new-tech:hover {
-        text-decoration: underline;
-    }
-
-    .row {
-        display: flex;
-        gap: 2rem;
-        align-items: flex-start;
+        transform: translateX(4px);
     }
 
     .actions {
         display: flex;
-        gap: 1rem;
-        margin-top: 1rem;
+        gap: 1.5rem;
+        margin-top: 2rem;
+        padding-top: 2rem;
+        border-top: 1px solid var(--nav-bg);
+    }
+
+    @media (max-width: 600px) {
+        .actions {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .project-form {
+            padding: 1.5rem;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+        }
     }
 
     .btn {
-        padding: 0.8rem 2rem;
-        border-radius: 10px;
+        padding: 1rem 2.5rem;
+        border-radius: 50px;
         border: none;
         font-weight: 600;
         cursor: pointer;
         text-decoration: none;
-        font-size: 1rem;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
     }
 
-    .btn.primary { background: var(--accent-primary); color: white; }
-    .btn.secondary { background: var(--bg-primary); color: var(--text-primary); }
+    .btn.primary { 
+        background: var(--accent-primary); 
+        color: white;
+        box-shadow: 0 4px 15px rgba(var(--accent-primary-rgb), 0.3);
+    }
+    
+    .btn.primary:hover:not(:disabled) {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 20px rgba(var(--accent-primary-rgb), 0.4);
+    }
+
+    .btn.secondary { 
+        background: transparent; 
+        color: var(--text-primary);
+        border: 2px solid var(--nav-bg);
+    }
+
+    .btn.secondary:hover {
+        background: var(--bg-primary);
+        border-color: var(--accent-primary);
+    }
+
+    .btn:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
 </style>
