@@ -17,8 +17,8 @@
 	<div class="footer-content">
 		<div class="footer-grid">
 			<div class="footer-section">
-				<h3>Daniel Johan Sørby</h3>
-				<p class="footer-description">{t.footer.description}</p>
+				<h3>{settings?.full_name || 'Daniel Johan Sørby'}</h3>
+				<p class="footer-description">{$language === 'no' ? settings?.footer_description_no : settings?.footer_description_en}</p>
 			</div>
 			<div class="footer-section">
 				<h4>{t.footer.contact}</h4>

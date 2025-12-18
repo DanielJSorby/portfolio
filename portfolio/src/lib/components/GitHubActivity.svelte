@@ -1,8 +1,9 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { language } from '$lib/stores/language';
+	import { page } from '$app/stores';
 
-	const username = 'DanielJSorby';
+	$: username = $page.data.settings?.github_username || 'DanielJSorby';
 	
 	interface GitHubStats {
 		repositories: number;

@@ -63,7 +63,7 @@
 >
 	<div class="hero-content">
 		<h1 class="animated-title">
-			<span class="line line1">{t.hero.title}</span>
+			<span class="line line1">{$language === 'no' ? settings?.hero_title_no : settings?.hero_title_en}</span>
 			<span class="line line2">{$language === 'no' ? settings?.hero_subtitle_no : settings?.hero_subtitle_en}</span>
 		</h1>
 		<div class="hero-buttons" role="navigation" aria-label={$language === 'no' ? 'Hovednavigasjon' : 'Main navigation'}>

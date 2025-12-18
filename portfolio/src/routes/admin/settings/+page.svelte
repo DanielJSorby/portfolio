@@ -47,6 +47,26 @@
 
     <div class="settings-grid">
         <section class="card">
+            <h2>Generell Info & SEO</h2>
+            <div class="form-group">
+                <label for="full-name">Fullt Navn</label>
+                <input type="text" id="full-name" bind:value={settings.full_name} />
+            </div>
+            <div class="form-group">
+                <label for="github-user">GitHub Brukernavn</label>
+                <input type="text" id="github-user" bind:value={settings.github_username} />
+            </div>
+            <div class="form-group">
+                <label for="seo-no">SEO Beskrivelse (Norsk)</label>
+                <textarea id="seo-no" bind:value={settings.seo_description_no} rows="2"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="seo-en">SEO Description (English)</label>
+                <textarea id="seo-en" bind:value={settings.seo_description_en} rows="2"></textarea>
+            </div>
+        </section>
+
+        <section class="card">
             <h2>Om meg (Bio)</h2>
             <div class="form-group">
                 <label for="bio-no">Biografi (Norsk)</label>
@@ -61,6 +81,14 @@
         <section class="card">
             <h2>Hero & Profil</h2>
             <div class="form-group">
+                <label for="hero-title-no">Hero Tittel (Norsk)</label>
+                <input type="text" id="hero-title-no" bind:value={settings.hero_title_no} />
+            </div>
+            <div class="form-group">
+                <label for="hero-title-en">Hero Title (English)</label>
+                <input type="text" id="hero-title-en" bind:value={settings.hero_title_en} />
+            </div>
+            <div class="form-group">
                 <label for="hero-no">Hero Undertittel (Norsk)</label>
                 <input type="text" id="hero-no" bind:value={settings.hero_subtitle_no} />
             </div>
@@ -71,6 +99,18 @@
             <div class="form-group">
                 <label for="profile-img">Profilbilde URL</label>
                 <input type="text" id="profile-img" bind:value={settings.profile_image_url} />
+            </div>
+        </section>
+
+        <section class="card">
+            <h2>Footer</h2>
+            <div class="form-group">
+                <label for="footer-no">Footer Beskrivelse (Norsk)</label>
+                <textarea id="footer-no" bind:value={settings.footer_description_no} rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="footer-en">Footer Description (English)</label>
+                <textarea id="footer-en" bind:value={settings.footer_description_en} rows="3"></textarea>
             </div>
         </section>
 

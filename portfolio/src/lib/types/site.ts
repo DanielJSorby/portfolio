@@ -31,5 +31,13 @@ export interface SiteSettings {
     profile_image_url: string;
     hero_subtitle_no: string;
     hero_subtitle_en: string;
+    footer_description_no: string;
+    footer_description_en: string;
+    github_username: string;
+    full_name: string;
+    seo_description_no: string;
+    seo_description_en: string;
+    hero_title_no: string;
+    hero_title_en: string;
 }
 
