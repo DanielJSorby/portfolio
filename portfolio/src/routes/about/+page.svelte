@@ -57,6 +57,15 @@
 			</p>
 		</div>
 		<div class="experience-item">
+			<h4>{$language === 'no' ? 'Utvikler for Elvebakken VGS' : 'Developer for Elvebakken VGS'}</h4>
+			<p class="date">2025</p>
+			<p>
+				{$language === 'no'
+					? 'Utvikler av Elvebakken sin Åpen Dag nettside. Her har jeg jobbet med å lage en moderne, responsiv og brukervennlig nettside. Bruker for eksempel Svelte Kit og MariaDB.'
+					: 'Developer for the open day website of Elvebakken. Here I have worked on creating a modern, responsive and user-friendly website. Using technologies like Svelte Kit and MariaDB.'}
+			</p>
+		</div>
+		<div class="experience-item">
 			<h4>{$language === 'no' ? 'Utvikler for KissMyArt.no' : 'Developer for KissMyArt.no'}</h4>
 			<p class="date">2025</p>
 			<p>
