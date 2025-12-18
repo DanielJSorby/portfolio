@@ -4,9 +4,39 @@
     import type { Project } from '$lib/types/project';
     import type { PageData } from './$types';
     import { invalidateAll } from '$app/navigation';
+    import { onMount } from 'svelte';
 
     export let data: PageData;
-    $: projects = data.projects;
+    let localProjects: Project[] = [];
+    let isUpdating = false;
+
+    // Update local list when data changes, but only if we're not busy
+    $: if (data.projects && !isUpdating) {
+        localProjects = data.projects;
+    }
+
+    onMount(() => {
+        const channel = supabase
+            .channel('projects-db-changes')
+            .on(
+                'postgres_changes',
+                {
+                    event: '*',
+                    schema: 'public',
+                    table: 'projects'
+                },
+                () => {
+                    if (!isUpdating) {
+                        invalidateAll();
+                    }
+                }
+            )
+            .subscribe();
+
+        return () => {
+            supabase.removeChannel(channel);
+        };
+    });
 
     async function toggleFeatured(project: Project) {
         const { error } = await supabase
@@ -17,52 +47,47 @@
         if (!error) invalidateAll();
     }
 
+    async function reorderProjects(newOrderIds: (number | undefined)[]) {
+        isUpdating = true;
+        try {
+            // 1. Move everything to a high temporary range
+            for (let i = 0; i < newOrderIds.length; i++) {
+                await supabase
+                    .from('projects')
+                    .update({ placement: 10000 + i })
+                    .eq('id', newOrderIds[i]);
+            }
+
+            // 2. Move everything to their final positions (0, 1, 2...)
+            for (let i = 0; i < newOrderIds.length; i++) {
+                await supabase
+                    .from('projects')
+                    .update({ placement: i })
+                    .eq('id', newOrderIds[i]);
+            }
+
+            await invalidateAll();
+        } catch (error: any) {
+            console.error('Reorder failed:', error);
+            alert('Kunne ikke endre rekkefølge: ' + error.message);
+        } finally {
+            isUpdating = false;
+        }
+    }
+
     async function moveProject(project: Project, direction: 'up' | 'down') {
-        const currentIndex = projects.findIndex(p => p.id === project.id);
+        const currentIndex = localProjects.findIndex(p => p.id === project.id);
         const targetIndex = direction === 'up' ? currentIndex - 1 : currentIndex + 1;
 
-        if (targetIndex < 0 || targetIndex >= projects.length) return;
+        if (targetIndex < 0 || targetIndex >= localProjects.length) return;
 
-        const targetProject = projects[targetIndex];
-        
-        const currentPlacement = project.placement || 0;
-        const targetPlacement = targetProject.placement || 0;
+        // Instant local update
+        const newProjects = [...localProjects];
+        const [moved] = newProjects.splice(currentIndex, 1);
+        newProjects.splice(targetIndex, 0, moved);
+        localProjects = newProjects;
 
-        // Use a temporary placement to avoid unique constraint violation during swap
-        const tempPlacement = -999;
-
-        // 1. Set current project to temp
-        const { error: err1 } = await supabase.from('projects')
-            .update({ placement: tempPlacement })
-            .eq('id', project.id);
-        
-        if (err1) {
-            console.error('Swap step 1 failed:', err1);
-            return;
-        }
-
-        // 2. Set target project to current project's old placement
-        const { error: err2 } = await supabase.from('projects')
-            .update({ placement: currentPlacement })
-            .eq('id', targetProject.id);
-
-        if (err2) {
-            console.error('Swap step 2 failed:', err2);
-            // Try to recover
-            await supabase.from('projects').update({ placement: currentPlacement }).eq('id', project.id);
-            return;
-        }
-
-        // 3. Set current project to target project's old placement
-        const { error: err3 } = await supabase.from('projects')
-            .update({ placement: targetPlacement })
-            .eq('id', project.id);
-
-        if (err3) {
-            console.error('Swap step 3 failed:', err3);
-        }
-
-        invalidateAll();
+        await reorderProjects(localProjects.map(p => p.id));
     }
 
     async function deleteProject(id: number) {
@@ -76,6 +101,35 @@
         if (!error) invalidateAll();
     }
 
+    let draggedItemIndex: number | null = null;
+
+    function handleDragStart(index: number) {
+        draggedItemIndex = index;
+    }
+
+    async function handleDragOver(e: DragEvent, index: number) {
+        e.preventDefault();
+        if (draggedItemIndex === null || draggedItemIndex === index) return;
+    }
+
+    async function handleDrop(targetIndex: number) {
+        if (draggedItemIndex === null || draggedItemIndex === targetIndex) {
+            draggedItemIndex = null;
+            return;
+        }
+
+        // Instant local update
+        const newProjects = [...localProjects];
+        const [movedProject] = newProjects.splice(draggedItemIndex, 1);
+        newProjects.splice(targetIndex, 0, movedProject);
+        localProjects = newProjects;
+
+        const newOrderIds = localProjects.map(p => p.id);
+        draggedItemIndex = null;
+        
+        await reorderProjects(newOrderIds);
+    }
+
     async function handleLogout() {
         await supabase.auth.signOut();
         window.location.href = '/login';
@@ -86,16 +140,24 @@
     <header>
         <h1>Prosjekt Administrasjon</h1>
         <div class="actions">
+            <a href="/admin/tech" class="btn secondary">Administrer Teknologier</a>
             <a href="/admin/new" class="btn primary">Nytt Prosjekt</a>
             <button on:click={handleLogout} class="btn secondary">Logg ut</button>
         </div>
     </header>
 
     <div class="project-list">
-        {#each projects as project, i}
-            <div class="project-item">
+        {#each localProjects as project, i (project.id)}
+            <div 
+                class="project-item"
+                draggable="true"
+                on:dragstart={() => handleDragStart(i)}
+                on:dragover={(e) => handleDragOver(e, i)}
+                on:drop={() => handleDrop(i)}
+                class:dragging={draggedItemIndex === i}
+            >
                 <div class="project-info">
-                    <span class="placement">#{project.placement}</span>
+                    <span class="drag-handle" title="Dra for å endre rekkefølge">⋮⋮</span>
                     <img src={project.image} alt="" class="thumbnail" />
                     <div class="details">
                         <h3>{project.title[$language]}</h3>
@@ -119,7 +181,7 @@
                     >↑</button>
                     <button 
                         class="icon-btn" 
-                        disabled={i === projects.length - 1} 
+                        disabled={i === localProjects.length - 1} 
                         on:click={() => moveProject(project, 'down')}
                         title="Flytt ned"
                     >↓</button>
@@ -173,18 +235,32 @@
         justify-content: space-between;
         align-items: center;
         box-shadow: var(--card-shadow);
+        cursor: grab;
+        transition: transform 0.2s, background-color 0.2s;
+    }
+
+    .project-item:active {
+        cursor: grabbing;
+    }
+
+    .project-item.dragging {
+        opacity: 0.5;
+        background: var(--bg-primary);
+        transform: scale(0.98);
+    }
+
+    .drag-handle {
+        color: var(--text-secondary);
+        cursor: grab;
+        font-size: 1.2rem;
+        padding: 0 0.5rem;
+        user-select: none;
     }
 
     .project-info {
         display: flex;
         align-items: center;
         gap: 1.5rem;
-    }
-
-    .placement {
-        font-weight: bold;
-        color: var(--text-secondary);
-        width: 30px;
     }
 
     .thumbnail {
@@ -256,4 +332,3 @@
         cursor: not-allowed;
     }
 </style>
-

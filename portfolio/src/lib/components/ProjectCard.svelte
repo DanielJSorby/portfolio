@@ -2,24 +2,24 @@
 	import { language } from '$lib/stores/language';
 	import { techColors } from '$lib/utils/techColors';
 
-	export let project: {
-		title: { no: string; en: string };
-		description: { no: string; en: string };
-		technologies: string[];
-		image: string;
-		link: string;
-	};
+	export let project: any;
+	export let selectedTech: string = '';
+	export let onTechClick: ((tech: string) => void) | undefined = undefined;
 
-	const fallbackImage = 'https://picsum.photos/id/1/800/400';
-	
+	function handleTechClick(tech: string) {
+		if (onTechClick) {
+			onTechClick(tech);
+		}
+	}
+
+	export let getTechColor: (tech: string) => string;
+
 	function handleImageError(event: Event) {
 		const img = event.target as HTMLImageElement;
 		img.src = fallbackImage;
 	}
 
-	function getTechColor(tech: string): string {
-		return tech in techColors ? techColors[tech as keyof typeof techColors] : '#666666';
-	}
+	const fallbackImage = 'https://picsum.photos/id/1/800/400';
 </script>
 
 <div 
@@ -46,8 +46,10 @@
 			{#each project.technologies as tech}
 				<span 
 					class="tech-tag" 
+					class:highlight={selectedTech === tech}
 					style="--tech-color: {getTechColor(tech)}"
 					role="listitem"
+					on:click={() => handleTechClick(tech)}
 				>
 					{tech}
 				</span>
@@ -135,9 +137,10 @@
 		font-size: clamp(0.75rem, 2vw, 0.875rem);
 		transition: all 0.3s ease;
 		border-left: 3px solid var(--tech-color);
+		cursor: pointer;
 	}
 
-	.tech-tag:hover {
+	.tech-tag:hover, .tech-tag.highlight {
 		background-color: var(--tech-color);
 		color: white;
 		transform: translateY(-2px);

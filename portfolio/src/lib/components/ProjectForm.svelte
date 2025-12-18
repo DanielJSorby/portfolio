@@ -1,7 +1,8 @@
 <script lang="ts">
     import { supabase } from '$lib/supabaseClient';
-    import { goto } from '$app/navigation';
+    import { goto, invalidateAll } from '$app/navigation';
     import type { Project } from '$lib/types/project';
+    import { onMount } from 'svelte';
 
     export let project: Project = {
         title: { no: '', en: '' },
@@ -14,11 +15,43 @@
     };
 
     let loading = false;
-    let techString = project.technologies.join(', ');
+    let availableTechnologies: any[] = [];
+
+    onMount(async () => {
+        const { data } = await supabase
+            .from('technologies')
+            .select('*')
+            .order('name');
+        if (data) availableTechnologies = data;
+    });
+
+    function toggleTechnology(techName: string) {
+        if (project.technologies.includes(techName)) {
+            project.technologies = project.technologies.filter(t => t !== techName);
+        } else {
+            project.technologies = [...project.technologies, techName];
+        }
+    }
+
+    function getTechColor(techName: string) {
+        const tech = availableTechnologies.find(t => t.name === techName);
+        return tech ? tech.color : '#666666';
+    }
 
     async function handleSubmit() {
         loading = true;
-        project.technologies = techString.split(',').map(t => t.trim()).filter(t => t !== '');
+        
+        // If it's a new project (no id), assign the next available placement
+        if (!project.id) {
+            const { data: countData } = await supabase
+                .from('projects')
+                .select('placement', { count: 'exact' })
+                .order('placement', { ascending: false })
+                .limit(1);
+            
+            const lastPlacement = countData?.[0]?.placement ?? -1;
+            project.placement = lastPlacement + 1;
+        }
 
         const { error } = await supabase
             .from('projects')
@@ -28,6 +61,7 @@
             alert('Feil ved lagring: ' + error.message);
             loading = false;
         } else {
+            await invalidateAll();
             goto('/admin');
         }
     }
@@ -38,52 +72,73 @@
         <section>
             <h2>Norsk (NO)</h2>
             <div class="form-group">
-                <label>Tittel (NO)</label>
-                <input type="text" bind:value={project.title.no} required />
+                <label>
+                    <span class="label-text">Tittel (NO)</span>
+                    <input type="text" bind:value={project.title.no} required />
+                </label>
             </div>
             <div class="form-group">
-                <label>Beskrivelse (NO)</label>
-                <textarea bind:value={project.description.no} required rows="4"></textarea>
+                <label>
+                    <span class="label-text">Beskrivelse (NO)</span>
+                    <textarea bind:value={project.description.no} required rows="4"></textarea>
+                </label>
             </div>
         </section>
 
         <section>
             <h2>English (EN)</h2>
             <div class="form-group">
-                <label>Title (EN)</label>
-                <input type="text" bind:value={project.title.en} required />
+                <label>
+                    <span class="label-text">Title (EN)</span>
+                    <input type="text" bind:value={project.title.en} required />
+                </label>
             </div>
             <div class="form-group">
-                <label>Description (EN)</label>
-                <textarea bind:value={project.description.en} required rows="4"></textarea>
+                <label>
+                    <span class="label-text">Description (EN)</span>
+                    <textarea bind:value={project.description.en} required rows="4"></textarea>
+                </label>
             </div>
         </section>
     </div>
 
     <div class="form-group">
-        <label>Teknologier (separert med komma)</label>
-        <input type="text" bind:value={techString} placeholder="SvelteKit, TypeScript, Supabase" />
+        <span class="label-text">Velg Teknologier</span>
+        <div class="tech-selection">
+            {#each availableTechnologies as tech}
+                <button 
+                    type="button"
+                    class="tech-tag" 
+                    class:active={project.technologies.includes(tech.name)}
+                    style="--tech-color: {tech.color}"
+                    on:click={() => toggleTechnology(tech.name)}
+                >
+                    {tech.name}
+                </button>
+            {/each}
+            <a href="/admin/tech" class="add-new-tech">+ Legg til ny teknologi</a>
+        </div>
     </div>
 
     <div class="form-group">
-        <label>Bilde-URL</label>
-        <input type="text" bind:value={project.image} required />
+        <label>
+            <span class="label-text">Bilde-URL</span>
+            <input type="text" bind:value={project.image} required />
+        </label>
     </div>
 
     <div class="form-group">
-        <label>Lenke (GitHub/Live)</label>
-        <input type="text" bind:value={project.link} required />
+        <label>
+            <span class="label-text">Lenke (GitHub/Live)</span>
+            <input type="text" bind:value={project.link} required />
+        </label>
     </div>
 
     <div class="row">
-        <div class="form-group">
-            <label>Rekkefølge (Placement)</label>
-            <input type="number" bind:value={project.placement} />
-        </div>
         <div class="form-group checkbox">
             <label>
                 <input type="checkbox" bind:checked={project.featured} />
-                Featured Prosjekt
+                <span class="label-text">Featured Prosjekt</span>
             </label>
         </div>
     </div>
@@ -129,9 +184,15 @@
         gap: 0.5rem;
     }
 
+    .label-text {
+        display: block;
+        font-weight: 600;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        margin-bottom: 0.5rem;
+    }
+
     .form-group.checkbox {
-        flex-direction: row;
-        align-items: center;
         margin-top: 1.5rem;
     }
 
@@ -142,19 +203,66 @@
         cursor: pointer;
     }
 
-    label {
-        font-weight: 600;
-        color: var(--text-secondary);
-        font-size: 0.9rem;
+    .form-group.checkbox .label-text {
+        margin-bottom: 0;
     }
 
     input[type="text"], input[type="number"], textarea {
+        width: 100%;
         padding: 0.75rem;
         border-radius: 10px;
         border: 1px solid var(--nav-bg);
         background: var(--bg-primary);
         color: var(--text-primary);
         font-size: 1rem;
+    }
+
+    .tech-selection {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5rem;
+        padding: 1rem;
+        background: var(--bg-primary);
+        border-radius: 12px;
+        border: 1px solid var(--nav-bg);
+    }
+
+    .tech-tag {
+        background-color: var(--nav-bg);
+        color: var(--nav-text);
+        padding: 0.25rem 0.75rem;
+        border-radius: 16px;
+        font-size: 0.875rem;
+        transition: all 0.3s ease;
+        border: none;
+        border-left: 3px solid var(--tech-color);
+        cursor: pointer;
+        opacity: 0.6;
+    }
+
+    .tech-tag.active {
+        background-color: var(--tech-color);
+        color: white;
+        opacity: 1;
+        transform: translateY(-2px);
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .tech-tag:hover {
+        opacity: 1;
+    }
+
+    .add-new-tech {
+        font-size: 0.8rem;
+        color: var(--accent-primary);
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        margin-left: 0.5rem;
+    }
+
+    .add-new-tech:hover {
+        text-decoration: underline;
     }
 
     .row {
@@ -182,4 +290,3 @@
     .btn.primary { background: var(--accent-primary); color: white; }
     .btn.secondary { background: var(--bg-primary); color: var(--text-primary); }
 </style>
-

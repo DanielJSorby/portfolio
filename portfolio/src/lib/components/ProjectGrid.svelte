@@ -13,18 +13,37 @@
 
     onMount(async () => {
         try {
-            const { data, error } = await supabase
+            // Fetch projects
+            const { data: projData, error: projError } = await supabase
                 .from('projects')
                 .select('*')
-                .order('id', { ascending: true });
+                .order('placement', { ascending: true });
             
-            if (!error && data) {
-                projects = data as unknown as Project[];
+            if (!projError && projData) {
+                projects = projData as unknown as Project[];
+            }
+
+            // Fetch tech colors
+            const { data: techData, error: techError } = await supabase
+                .from('technologies')
+                .select('*');
+            
+            if (!techError && techData) {
+                techData.forEach(t => {
+                    dbTechColors[t.name] = t.color;
+                });
             }
         } finally {
             loading = false;
         }
     });
+
+    let dbTechColors: Record<string, string> = {};
+
+    function getTechColor(tech: string): string {
+        return dbTechColors[tech] || '#666666';
+    }
+
 
     $: filteredProjects = selectedTech 
         ? projects.filter((project: Project) => project.technologies.includes(selectedTech))
@@ -52,11 +71,12 @@
         </p>
     {:else}
         {#each displayedProjects as project}
-            <ProjectCard 
-                {project} 
-                {selectedTech}
-                onTechClick={handleTechClick}
-            />
+        <ProjectCard 
+            {project} 
+            {selectedTech}
+            onTechClick={handleTechClick}
+            getTechColor={getTechColor}
+        />
         {/each}
     {/if}
 </div>

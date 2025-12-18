@@ -9,7 +9,9 @@
 	import { language, translations } from '$lib/stores/language';
 	import { startHeroAnimation } from '$lib/stores/animation';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores';
 
+	export let data;
 	$: t = translations[$language];
 
 	let lastScrollY = 0;
@@ -136,6 +138,9 @@
 			<a href="/projects" on:click={closeMobileMenu}>{t.nav.projects}</a>
 			<a href="/about" on:click={closeMobileMenu}>{t.nav.about}</a>
 			<a href="/contact" on:click={closeMobileMenu}>{t.nav.contact}</a>
+			{#if data.isLoggedIn}
+				<a href="/admin" on:click={closeMobileMenu} class="admin-link">Admin</a>
+			{/if}
 			<div class="nav-controls">
 				<ThemeToggle />
 				<LanguageToggle />

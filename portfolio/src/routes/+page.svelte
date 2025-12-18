@@ -11,6 +11,7 @@
 	$: t = translations[$language];
 
 	$: featuredProjects = data.projects;
+	$: techColors = data.techColors;
 
 	interface Skill {
 		name: string;
@@ -49,7 +50,7 @@
 	}
 
 	function getTechColor(tech: string): string {
-		return tech in techColors ? techColors[tech as keyof typeof techColors] : '#666666';
+		return techColors[tech] || '#666666';
 	}
 
 	onMount(() => {
@@ -114,7 +115,7 @@ aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
 	<h2>{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
 	<div class="projects-grid">
 		{#each featuredProjects as project}
-			<ProjectCard {project} />
+			<ProjectCard {project} {getTechColor} />
 		{/each}
 	</div>
 	<div class="view-all">
