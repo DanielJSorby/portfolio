@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { language } from '$lib/stores/language';
-	import { techColors } from '$lib/utils/techColors';
 
 	export let project: any;
 	export let selectedTech: string = '';
@@ -36,23 +35,23 @@
 		/>
 	</div>
 	<div class="project-content">
-		<h3 tabindex="0">{project.title[$language]}</h3>
-		<p tabindex="0">{project.description[$language]}</p>
+		<h3>{project.title[$language]}</h3>
+		<p>{project.description[$language]}</p>
 		<div 
 			class="tech-stack" 
 			role="list" 
 			aria-label={$language === 'no' ? 'Teknologier brukt' : 'Technologies used'}
 		>
 			{#each project.technologies as tech}
-				<span 
+				<button 
+					type="button"
 					class="tech-tag" 
 					class:highlight={selectedTech === tech}
 					style="--tech-color: {getTechColor(tech)}"
-					role="listitem"
 					on:click={() => handleTechClick(tech)}
 				>
 					{tech}
-				</span>
+				</button>
 			{/each}
 		</div>
 		<a 
@@ -136,6 +135,7 @@
 		border-radius: 16px;
 		font-size: clamp(0.75rem, 2vw, 0.875rem);
 		transition: all 0.3s ease;
+		border: none;
 		border-left: 3px solid var(--tech-color);
 		cursor: pointer;
 	}
@@ -160,4 +160,4 @@
 	.project-link:hover {
 		transform: translateX(5px);
 	}
-</style> 
+</style>

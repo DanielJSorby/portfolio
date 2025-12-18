@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { language, translations } from '$lib/stores/language';
-	import { techColors } from '$lib/utils/techColors';
 	import { onMount } from 'svelte';
 	import { goto } from '$app/navigation';
 	import GitHubActivity from '$lib/components/GitHubActivity.svelte';
@@ -11,21 +10,17 @@
 	$: t = translations[$language];
 
 	$: featuredProjects = data.projects;
-	$: techColors = data.techColors;
+	$: allTechColors = data.techColors;
 
 	interface Skill {
 		name: string;
 		color: string;
 	}
 
-	const skills: Skill[] = Object.entries(techColors).map(([name, color]) => ({ 
+	$: skills = Object.entries(allTechColors).map(([name, color]) => ({ 
 		name, 
 		color: color as string 
 	}));
-
-	let sectionsVisible = {
-		projects: false
-	};
 
 	let showScrollTop = false;
 
@@ -50,7 +45,7 @@
 	}
 
 	function getTechColor(tech: string): string {
-		return techColors[tech] || '#666666';
+		return allTechColors[tech] || '#666666';
 	}
 
 	onMount(() => {

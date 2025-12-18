@@ -151,6 +151,7 @@
             <div 
                 class="project-item"
                 draggable="true"
+                role="listitem"
                 on:dragstart={() => handleDragStart(i)}
                 on:dragover={(e) => handleDragOver(e, i)}
                 on:drop={() => handleDrop(i)}

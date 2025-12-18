@@ -165,7 +165,6 @@
 			on:click={closeMobileMenu}
 			on:keydown={(e) => e.key === 'Escape' && closeMobileMenu()}
 			aria-label={$language === 'no' ? 'Lukk meny' : 'Close menu'}
-			role="button"
 			tabindex="0"
 		></button>
 		<div class="mobile-menu" class:open={isMobileMenuOpen}>

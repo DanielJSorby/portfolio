@@ -33,11 +33,6 @@
         }
     }
 
-    function getTechColor(techName: string) {
-        const tech = availableTechnologies.find(t => t.name === techName);
-        return tech ? tech.color : '#666666';
-    }
-
     async function handleSubmit() {
         loading = true;
         
@@ -45,7 +40,7 @@
         if (!project.id) {
             const { data: countData } = await supabase
                 .from('projects')
-                .select('placement', { count: 'exact' })
+                .select('placement')
                 .order('placement', { ascending: false })
                 .limit(1);
             
@@ -72,32 +67,24 @@
         <section>
             <h2>Norsk (NO)</h2>
             <div class="form-group">
-                <label>
-                    <span class="label-text">Tittel (NO)</span>
-                    <input type="text" bind:value={project.title.no} required />
-                </label>
+                <label for="title-no" class="label-text">Tittel (NO)</label>
+                <input type="text" id="title-no" bind:value={project.title.no} required />
             </div>
             <div class="form-group">
-                <label>
-                    <span class="label-text">Beskrivelse (NO)</span>
-                    <textarea bind:value={project.description.no} required rows="4"></textarea>
-                </label>
+                <label for="desc-no" class="label-text">Beskrivelse (NO)</label>
+                <textarea id="desc-no" bind:value={project.description.no} required rows="4"></textarea>
             </div>
         </section>
 
         <section>
             <h2>English (EN)</h2>
             <div class="form-group">
-                <label>
-                    <span class="label-text">Title (EN)</span>
-                    <input type="text" bind:value={project.title.en} required />
-                </label>
+                <label for="title-en" class="label-text">Title (EN)</label>
+                <input type="text" id="title-en" bind:value={project.title.en} required />
             </div>
             <div class="form-group">
-                <label>
-                    <span class="label-text">Description (EN)</span>
-                    <textarea bind:value={project.description.en} required rows="4"></textarea>
-                </label>
+                <label for="desc-en" class="label-text">Description (EN)</label>
+                <textarea id="desc-en" bind:value={project.description.en} required rows="4"></textarea>
             </div>
         </section>
     </div>
@@ -121,17 +108,13 @@
     </div>
 
     <div class="form-group">
-        <label>
-            <span class="label-text">Bilde-URL</span>
-            <input type="text" bind:value={project.image} required />
-        </label>
+        <label for="image-url" class="label-text">Bilde-URL</label>
+        <input type="text" id="image-url" bind:value={project.image} required />
     </div>
 
     <div class="form-group">
-        <label>
-            <span class="label-text">Lenke (GitHub/Live)</span>
-            <input type="text" bind:value={project.link} required />
-        </label>
+        <label for="link-url" class="label-text">Lenke (GitHub/Live)</label>
+        <input type="text" id="link-url" bind:value={project.link} required />
     </div>
 
     <div class="row">
@@ -207,7 +190,7 @@
         margin-bottom: 0;
     }
 
-    input[type="text"], input[type="number"], textarea {
+    input[type="text"], textarea {
         width: 100%;
         padding: 0.75rem;
         border-radius: 10px;

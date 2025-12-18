@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { language } from '$lib/stores/language';
-	import { techColors } from '$lib/utils/techColors';
 
 	const username = 'DanielJSorby';
 	
@@ -61,11 +60,6 @@
 		} finally {
 			loading = false;
 		}
-	}
-
-	function getTechColor(tech: string | null): string {
-		if (!tech) return '#666666';
-		return tech in techColors ? techColors[tech as keyof typeof techColors] : '#666666';
 	}
 
 	onMount(fetchGitHubData);
@@ -150,10 +144,6 @@
 						<div class="repo-meta">
 							{#if repo.language}
 								<span class="language-tag">
-									<span 
-										class="language-dot" 
-										style="background-color: {getTechColor(repo.language)}"
-									></span>
 									{repo.language}
 								</span>
 							{/if}
@@ -204,12 +194,6 @@
 		height: 80px;
 		border-radius: 50%;
 		border: 2px solid var(--accent-primary);
-	}
-
-	.profile-details h2 {
-		font-size: 1.5rem;
-		margin-bottom: 0.5rem;
-		color: var(--text-primary);
 	}
 
 	.stats-row {
@@ -324,13 +308,6 @@
 		gap: 0.25rem;
 	}
 
-	.language-dot {
-		width: 12px;
-		height: 12px;
-		border-radius: 50%;
-		display: inline-block;
-	}
-
 	.meta-stat {
 		display: flex;
 		align-items: center;
@@ -420,4 +397,4 @@
 		margin-bottom: 0.5rem;
 		color: var(--accent-primary);
 	}
-</style> 
+</style>
