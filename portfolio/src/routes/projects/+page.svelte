@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { language, translations } from '$lib/stores/language';
 	import { techColors } from '$lib/utils/techColors';
-	import projectsData from '$lib/data/projects.json';
 	import { page } from '$app/stores';
 	import { onMount } from 'svelte';
 	import type { Project } from '$lib/types/project';
 	import type { TechColors } from '$lib/types/techColors';
+	import type { PageData } from './$types';
 	
+	export let data: PageData;
 	$: t = translations[$language];
 
-	const projects: Project[] = projectsData.projects;
+	$: projects = data.projects;
 
 	// Get unique technologies from all projects
-	const allTechnologies = [...new Set(projects.flatMap(p => p.technologies))].sort();
+	$: allTechnologies = [...new Set(projects.flatMap(p => p.technologies))].sort();
 	
 	let selectedTech: string = '';
 

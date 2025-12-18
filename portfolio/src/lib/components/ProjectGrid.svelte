@@ -1,13 +1,30 @@
 <script lang="ts">
     import ProjectCard from './ProjectCard.svelte';
-    import projectsData from '$lib/data/projects.json';
+    import { supabase } from '$lib/supabaseClient';
     import { language } from '$lib/stores/language';
     import type { Project } from '$lib/types/project';
+    import { onMount } from 'svelte';
 
     export let selectedTech: string = '';
     export let limit: number | undefined = undefined;
 
-    const projects: Project[] = projectsData.projects;
+    let projects: Project[] = [];
+    let loading = true;
+
+    onMount(async () => {
+        try {
+            const { data, error } = await supabase
+                .from('projects')
+                .select('*')
+                .order('id', { ascending: true });
+            
+            if (!error && data) {
+                projects = data as unknown as Project[];
+            }
+        } finally {
+            loading = false;
+        }
+    });
 
     $: filteredProjects = selectedTech 
         ? projects.filter((project: Project) => project.technologies.includes(selectedTech))
@@ -23,23 +40,34 @@
 </script>
 
 <div class="project-grid">
-    {#if displayedProjects.length === 0}
+    {#if loading}
+        <p class="loading">
+            {$language === 'no' ? 'Laster prosjekter...' : 'Loading projects...'}
+        </p>
+    {:else if displayedProjects.length === 0}
         <p class="no-projects">
             {$language === 'no' 
                 ? 'Ingen prosjekter funnet for valgt teknologi.' 
                 : 'No projects found for selected technology.'}
         </p>
+    {:else}
+        {#each displayedProjects as project}
+            <ProjectCard 
+                {project} 
+                {selectedTech}
+                onTechClick={handleTechClick}
+            />
+        {/each}
     {/if}
-    {#each displayedProjects as project}
-        <ProjectCard 
-            {project} 
-            {selectedTech}
-            onTechClick={handleTechClick}
-        />
-    {/each}
 </div>
 
 <style>
+    .loading {
+        grid-column: 1 / -1;
+        text-align: center;
+        color: var(--text-secondary);
+        padding: 2rem;
+    }
     .project-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

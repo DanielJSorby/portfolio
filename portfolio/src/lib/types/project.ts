@@ -1,4 +1,5 @@
 export interface Project {
+	id?: number;
 	title: {
 		no: string;
 		en: string;
@@ -10,4 +11,6 @@ export interface Project {
 	technologies: string[];
 	image: string;
 	link: string;
+	placement?: number;
+	featured?: boolean;
 }

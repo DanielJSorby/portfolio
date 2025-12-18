@@ -5,8 +5,12 @@
 	import { goto } from '$app/navigation';
 	import GitHubActivity from '$lib/components/GitHubActivity.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
+	import type { PageData } from './$types';
 	
+	export let data: PageData;
 	$: t = translations[$language];
+
+	$: featuredProjects = data.projects;
 
 	interface Skill {
 		name: string;
@@ -17,50 +21,6 @@
 		name, 
 		color: color as string 
 	}));
-
-	const featuredProjects = [
-		{
-			"title": {
-				"no": "Dasi GPT",
-				"en": "Dasi GPT"
-			},
-			"description": {
-				"no": "En ai chatbot som hjelper deg med alt du trenger!",
-				"en": "An ai chatbot that helps you with everything you need!"
-			},
-			"technologies": [
-				"Svelte Kit",
-				"TypeScript",
-				"OpenAI",
-				"FireBase",
-				"Git",
-				"Markdown",
-				"JavaScript"
-			],
-			"image": "https://i.ibb.co/p1czy7q/Skjermbilde-2025-01-06-kl-18-47-33.png",
-			"link": "https://github.com/DanielOgSimen/DASI"
-		},
-		{
-			"title": {
-				"no": "Jobtrackr",
-				"en": "Jobtrackr"
-			},
-			"description": {
-				"no": "En app som hjelper deg med å holde styr på jobbintervjuer",
-				"en": "An app that helps you keep track of job interviews"
-			},
-			"technologies": [
-				"Svelte Kit",
-				"TypeScript",
-				"MariaDB",
-				"Git",
-				"Markdown",
-				"JavaScript"
-			],
-			"image": "/images/projects/jobtrackr.png",
-			"link": "https://github.com/DanielJSorby/jobtrackr"
-		}
-	];
 
 	let sectionsVisible = {
 		projects: false
@@ -105,7 +65,7 @@
 	aria-label={$language === 'no' ? 'Helteseksjon' : 'Hero section'}
 >
 	<div class="hero-content">
-		<h1 class="animated-title" tabindex="0">
+		<h1 class="animated-title">
 			<span class="line line1">{t.hero.title}</span>
 			<span class="line line2">{t.hero.subtitle}</span>
 		</h1>
@@ -125,10 +85,9 @@
 
 <div 
 class="skills-container" 
-role="region" 
 aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
 >
-<h2 tabindex="0">{$language === 'no' ? 'Ferdigheter' : 'Skills'}</h2>
+<h2 id="skills-title">{$language === 'no' ? 'Ferdigheter' : 'Skills'}</h2>
 <div class="skills-carousel">
     <div class="skills-track">
         {#each [...skills, ...skills, ...skills, ...skills] as skill}
@@ -138,7 +97,7 @@ aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
         on:click={() => handleSkillClick(skill)}
         on:keydown={(e) => e.key === 'Enter' && handleSkillClick(skill)}
         role="button"
-        tabindex="1"
+        tabindex="0"
         aria-label={$language === 'no' ? `Klikk for å se ${skill.name} prosjekter` : `Click to see ${skill.name} projects`}
         >
         {skill.name}
@@ -150,10 +109,9 @@ aria-label={$language === 'no' ? 'Ferdigheter' : 'Skills'}
 
 <section 
 	class="featured" 
-	role="region" 
 	aria-label={$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}
 >
-	<h2 tabindex="0">{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
+	<h2>{$language === 'no' ? 'Utvalgte Prosjekter' : 'Featured Projects'}</h2>
 	<div class="projects-grid">
 		{#each featuredProjects as project}
 			<ProjectCard {project} />
