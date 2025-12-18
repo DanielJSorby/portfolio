@@ -2,8 +2,10 @@
 	import ThemeToggle from './ThemeToggle.svelte';
 	import LanguageToggle from './LanguageToggle.svelte';
 	import { language, translations } from '$lib/stores/language';
+	import { page } from '$app/stores';
 
 	$: t = translations[$language];
+	$: settings = $page.data.settings;
 </script>
 
 <footer>
@@ -22,20 +24,24 @@
 				<h4>{t.footer.contact}</h4>
 				<ul class="footer-links">
 					<li>
-						<a href="mailto:kontakt@danielsorby.no">
+						<a href="mailto:{settings?.contact_email || 'kontakt@danielsorby.no'}">
 							<span class="icon">✉</span> {t.footer.email}
 						</a>
 					</li>
-					<li>
-						<a href="https://github.com/danieljsorby" target="_blank" rel="noopener noreferrer">
-							<span class="icon">⌨</span> GitHub
-						</a>
-					</li>
-					<li>
-						<a href="www.linkedin.com/in/danieljsorby" target="_blank" rel="noopener noreferrer">
-							<span class="icon">💼</span> LinkedIn
-						</a>
-					</li>
+					{#if settings?.github_url}
+						<li>
+							<a href={settings.github_url} target="_blank" rel="noopener noreferrer">
+								<span class="icon">⌨</span> GitHub
+							</a>
+						</li>
+					{/if}
+					{#if settings?.linkedin_url}
+						<li>
+							<a href={settings.linkedin_url} target="_blank" rel="noopener noreferrer">
+								<span class="icon">💼</span> LinkedIn
+							</a>
+						</li>
+					{/if}
 				</ul>
 			</div>
 			<div class="footer-section">

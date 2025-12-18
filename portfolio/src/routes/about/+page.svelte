@@ -2,10 +2,14 @@
 	import { language, translations } from '$lib/stores/language';
 	import { onMount } from 'svelte';
 
+	export let data;
 	$: t = translations[$language];
+	$: settings = data.settings;
+	$: experience = data.experience;
+	$: education = data.education;
 
 	let imageLoaded = false;
-	const profileImage = "/images/Splash%20daniel%20foran%20slottet.png";
+	$: profileImage = settings?.profile_image_url || "/images/Splash%20daniel%20foran%20slottet.png";
 
 	onMount(() => {
 		const img = new Image();
@@ -33,7 +37,7 @@
 			</div>
 			<div class="intro">
 				<h2>Daniel Johan Sørby</h2>
-				<p class="title">{t.hero.subtitle}</p>
+				<p class="title">{$language === 'no' ? settings?.hero_subtitle_no : settings?.hero_subtitle_en}</p>
 			</div>
 		</div>
 	</div>
@@ -41,64 +45,30 @@
 	<section class="about-content">
 		<h3>{t.about.background}</h3>
 		<p>
-			{$language === 'no' 
-				? 'Jeg er en engasjert full-stack utvikler med lidenskap for å skape innovative og brukervennlige løsninger. Min reise innen programmering startet med en sterk interesse for teknologi og et ønske om å bygge ting som gjør en forskjell.'
-				: 'I am a passionate full-stack developer dedicated to creating innovative and user-friendly solutions. My journey in programming began with a strong interest in technology and a desire to build things that make a difference.'}
+			{$language === 'no' ? settings?.bio_no : settings?.bio_en}
 		</p>
 
-		<h3>{t.about.experience}</h3>
-		<div class="experience-item">
-			<h4>{$language === 'no' ? 'Freelance Utvikler' : 'Freelance Developer'}</h4>
-			<p class="date">2020 - {$language === 'no' ? 'Nåværende' : 'Present'}</p>
-			<p>
-				{$language === 'no'
-					? 'Jobber med diverse prosjekter, med fokus på webutvikling og design. Bruker moderne teknologier som React og Svelte.'
-					: 'Working on various projects, focusing on web development and design. Using modern technologies like React, and Svelte.'}
-			</p>
-		</div>
-		<div class="experience-item">
-			<h4>{$language === 'no' ? 'Utvikler for Elvebakken VGS' : 'Developer for Elvebakken VGS'}</h4>
-			<p class="date">2025</p>
-			<p>
-				{$language === 'no'
-					? 'Utvikler av Elvebakken sin Åpen Dag nettside. Her har jeg jobbet med å lage en moderne, responsiv og brukervennlig nettside. Bruker for eksempel Svelte Kit og MariaDB.'
-					: 'Developer for the open day website of Elvebakken. Here I have worked on creating a modern, responsive and user-friendly website. Using technologies like Svelte Kit and MariaDB.'}
-			</p>
-		</div>
-		<div class="experience-item">
-			<h4>{$language === 'no' ? 'Utvikler for KissMyArt.no' : 'Developer for KissMyArt.no'}</h4>
-			<p class="date">2025</p>
-			<p>
-				{$language === 'no'
-					? 'Utvikler av klesbutikken KissMyArt.no. Jobber med å lage en moderne og responsiv nettbutikk. Bruker for eksempel Wordpress og WooComerence'
-					: 'Developer for the clothing store KissMyArt.no. Working on creating a modern and responsive online store. Using technologies like Wordpress and WooCommerce.'}
-			</p>
-		</div>
-        <div class="experience-item">
-			<h4>{$language === 'no' ? 'Visuelle Medier NRK' : 'Visual Media NRK'}</h4>
-			<p class="date">2024</p>
-			<p>
-				{$language === 'no'
-					? 'Hjalp til å lage JuleMimre nettsiden på NRK, hvor man kan mimre tilbake til julen når man var liten. Laget i følge med Jobbuke på skolen'
-					: 'Helped create the “JuleMimre” website for NRK, where users can reminisce about Christmas from their childhood. Created as part of the school work experience week.'}
-			</p>
-		</div>
+		{#if experience && experience.length > 0}
+			<h3>{t.about.experience}</h3>
+			{#each experience as exp}
+				<div class="experience-item">
+					<h4>{$language === 'no' ? exp.title_no : exp.title_en} - {exp.company}</h4>
+					<p class="date">{$language === 'no' ? exp.date_no : exp.date_en}</p>
+					<p>{$language === 'no' ? exp.description_no : exp.description_en}</p>
+				</div>
+			{/each}
+		{/if}
 
-		<h3>{t.about.education}</h3>
-		<div class="education-item">
-			<h4>{$language === 'no' 
-				? 'Informasjonsteknologi og Medieproduksjon med spesialisering i Informasjonsteknologi'
-				: 'Information Technology and Media Production with specialization in Information Technology'}</h4>
-			<p class="date">2023 - 2026</p>
-			<p>Elevbakken VGS</p>
-		</div>
-		<div class="education-item">
-			<h4>{$language === 'no' 
-				? 'Grunnskole'
-				: 'Primary and lower secondary education'}</h4>
-			<p class="date">2013 - 2023</p>
-			<p>Ellingsrudåsen Skole, Ellingrud Skole, Kristelig Gymnasium</p>
-		</div>
+		{#if education && education.length > 0}
+			<h3>{t.about.education}</h3>
+			{#each education as edu}
+				<div class="education-item">
+					<h4>{$language === 'no' ? edu.title_no : edu.title_en}</h4>
+					<p class="date">{edu.date}</p>
+					<p>{edu.institution}</p>
+				</div>
+			{/each}
+		{/if}
 	</section>
 </div>
 

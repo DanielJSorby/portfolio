@@ -8,6 +8,7 @@
 	
 	export let data: PageData;
 	$: t = translations[$language];
+	$: settings = data.settings;
 
 	$: featuredProjects = data.projects;
 	$: allTechColors = data.techColors;
@@ -63,7 +64,7 @@
 	<div class="hero-content">
 		<h1 class="animated-title">
 			<span class="line line1">{t.hero.title}</span>
-			<span class="line line2">{t.hero.subtitle}</span>
+			<span class="line line2">{$language === 'no' ? settings?.hero_subtitle_no : settings?.hero_subtitle_en}</span>
 		</h1>
 		<div class="hero-buttons" role="navigation" aria-label={$language === 'no' ? 'Hovednavigasjon' : 'Main navigation'}>
 			<a href="/projects" class="cta-button primary" role="button">

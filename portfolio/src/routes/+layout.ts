@@ -24,9 +24,15 @@ export const load: PageLoad = async () => {
         });
     }
 
+    const { data: settings } = await supabase
+        .from('site_settings')
+        .select('*')
+        .single();
+
     return {
         techColors: techColorsObj,
         technologies: technologies ?? [],
+        settings: settings ?? null,
         isLoggedIn
     };
 };

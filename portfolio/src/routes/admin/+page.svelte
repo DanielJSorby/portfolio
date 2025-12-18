@@ -84,6 +84,12 @@
                         <a href="/admin/tech" class="btn secondary">
                             🎨 Alle Teknologier
                         </a>
+                        <a href="/admin/about" class="btn secondary">
+                            👨‍💻 Erfaring & Utdanning
+                        </a>
+                        <a href="/admin/settings" class="btn secondary">
+                            ⚙️ Sideinnstillinger
+                        </a>
                     </div>
                 </div>
             </div>
