@@ -10,6 +10,7 @@
 	import { startHeroAnimation } from '$lib/stores/animation';
 	import { onMount } from 'svelte';
 	import { page } from '$app/stores';
+	import { injectAnalytics } from '@vercel/analytics/sveltekit'
 
 	export let data;
 	$: t = translations[$language];
@@ -46,6 +47,8 @@
 	}
 
 	onMount(async () => {
+		injectAnalytics();
+		
 		const handleScroll = () => {
 			const currentScrollY = window.scrollY;
 			isNavVisible = lastScrollY > currentScrollY || currentScrollY < 50;

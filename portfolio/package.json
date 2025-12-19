@@ -25,6 +25,7 @@
 	},
 	"dependencies": {
 		"@supabase/supabase-js": "^2.88.0",
+		"@vercel/analytics": "^1.6.1",
 		"openai": "^4.24.1",
 		"supabase": "^2.67.2"
 	}
